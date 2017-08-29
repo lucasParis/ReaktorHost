@@ -161,8 +161,7 @@ void MainHostWindow::tryToQuitApplication()
     {
         new AsyncQuitRetrier();
     }
-    else if (getGraphEditor() == nullptr
-              || getGraphEditor()->graph->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+    else if (getGraphEditor() == nullptr || getGraphEditor()->graph->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
     {
         // Some plug-ins do not want [NSApp stop] to be called
         // before the plug-ins are not deallocated.

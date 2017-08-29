@@ -17,5 +17,146 @@
             endingLineNumber = "117">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/PluginEditor.cpp"
+            timestampString = "525732460.789026"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor&amp; owner)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/FilterGraph.cpp"
+            timestampString = "525733053.718636"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "FilterGraph::addFilter (const PluginDescription&amp; desc, Point&lt;double&gt; p)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.cpp"
+            timestampString = "525733096.87446"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1110"
+            endingLineNumber = "1110"
+            landmarkName = "AudioProcessorGraph::addNode (AudioProcessor* const newProcessor, uint32 nodeId)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.h"
+            timestampString = "525733274.968639"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "juce::AudioProcessorGraph::Node::~Node()"
+                  moduleName = "modPlug"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nicolai/Documents/git/modPlug/Builds/MacOSX/../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.h"
+                  timestampString = "525733274.997115"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "juce::AudioProcessorGraph::Node::~Node()"
+                  moduleName = "modPlug"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nicolai/Documents/git/modPlug/Builds/MacOSX/../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.h"
+                  timestampString = "525733275.001306"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "juce::AudioProcessorGraph::Node::~Node()"
+                  moduleName = "modPlug"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nicolai/Documents/git/modPlug/Builds/MacOSX/../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.h"
+                  timestampString = "525733275.007399"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "27">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.cpp"
+            timestampString = "525733336.254808"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1078"
+            endingLineNumber = "1078"
+            landmarkName = "AudioProcessorGraph::addNode (AudioProcessor* const newProcessor, uint32 nodeId)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../sdks/JUCE-5.1.1/modules/juce_audio_processors/processors/juce_AudioProcessorGraph.cpp"
+            timestampString = "525742369.930574"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1111"
+            endingLineNumber = "1111"
+            landmarkName = "AudioProcessorGraph::addNode (AudioProcessor* const newProcessor, uint32 nodeId)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

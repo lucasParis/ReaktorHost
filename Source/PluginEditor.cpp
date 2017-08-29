@@ -128,7 +128,7 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
     ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
     
     String error = deviceManager.initialise (256, 256, savedAudioState, true);
-    
+
 //    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
     
 //    restoreWindowStateFromString (getAppProperties().getUserSettings()->getValue ("mainWindowPos"));
