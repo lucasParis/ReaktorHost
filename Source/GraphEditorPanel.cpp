@@ -1037,8 +1037,9 @@ struct TooltipBar   : public Component,
 
 //==============================================================================
 GraphDocumentComponent::GraphDocumentComponent (AudioPluginFormatManager& fm, AudioDeviceManager& dm)
-    : graph (new FilterGraph (fm)), deviceManager (dm),
-      graphPlayer (getAppProperties().getUserSettings()->getBoolValue ("doublePrecisionProcessing", false))
+    : graph (new FilterGraph (fm)), deviceManager (dm)
+//      graphPlayer (getAppProperties().getUserSettings()->getBoolValue ("doublePrecisionProcessing", false))
+    , graphPlayer (false)
 {
     addAndMakeVisible (graphPanel = new GraphEditorPanel (*graph));
 

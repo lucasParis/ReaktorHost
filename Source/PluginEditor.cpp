@@ -26,6 +26,8 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "InternalFilters.h"
+#include "GraphEditorPanel.h"
 
 //==============================================================================
 // This is a handy slider subclass that controls an AudioProcessorParameter
@@ -104,15 +106,54 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
     setResizeLimits (400, 200, 800, 300);
 
     // set our component's initial size to be the last one that was stored in the filter's settings
-    setSize (owner.lastUIWidth,
-             owner.lastUIHeight);
+    setSize (owner.lastUIWidth, owner.lastUIHeight);
 
     // start a timer which will keep our timecode display updated
 //    startTimerHz (30);
+    
+    //===========================================================================
+    
+    
+    formatManager.addDefaultFormats();
+    formatManager.addFormat (new InternalPluginFormat());
+    
+//    ScopedPointer<XmlElement> savedAudioState (getAppProperties().getUserSettings()->getXmlValue ("audioDeviceState"));
+    
+    deviceManager.initialise (256, 256, nullptr, true);
+    
+    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
+    
+//    restoreWindowStateFromString (getAppProperties().getUserSettings()->getValue ("mainWindowPos"));
+    
+    setVisible (true);
+    
+//    InternalPluginFormat internalFormat;
+//    internalFormat.getAllTypes (internalTypes);
+    
+//    ScopedPointer<XmlElement> savedPluginList (getAppProperties().getUserSettings()->getXmlValue ("pluginList"));
+    
+//    if (savedPluginList != nullptr)
+//        knownPluginList.recreateFromXml (*savedPluginList);
+//    
+//    pluginSortMethod = (KnownPluginList::SortMethod) getAppProperties().getUserSettings()->getIntValue ("pluginSortMethod", KnownPluginList::sortByManufacturer);
+//    
+//    knownPluginList.addChangeListener (this);
+    
+//    if (auto* filterGraph = graphDocumentComponent->graph.get())
+//        filterGraph->addChangeListener (this);
+    
+    
+//    addKeyListener (getCommandManager().getKeyMappings());
+    
+//    Process::setPriority (Process::HighPriority);
+    
+    
+//    getCommandManager().setFirstCommandTarget (this);
 }
 
 JuceDemoPluginAudioProcessorEditor::~JuceDemoPluginAudioProcessorEditor()
 {
+    graphDocumentComponent = nullptr;
 }
 
 //==============================================================================
@@ -195,4 +236,32 @@ void JuceDemoPluginAudioProcessorEditor::resized()
 //        displayText << "  (playing)";
 //
 //    timecodeDisplayLabel.setText (displayText.toString(), dontSendNotification);
+//}
+
+//void JuceDemoPluginAudioProcessorEditor::changeListenerCallback (ChangeBroadcaster* changed)
+//{
+//    if (changed == &knownPluginList)
+//    {
+//        menuItemsChanged();
+//        
+//        // save the plugin list every time it gets chnaged, so that if we're scanning and it crashes, we've still saved the previous ones
+//        ScopedPointer<XmlElement> savedPluginList (knownPluginList.createXml());
+//        
+//        if (savedPluginList != nullptr)
+//        {
+//            getAppProperties().getUserSettings()->setValue ("pluginList", savedPluginList);
+//            getAppProperties().saveIfNeeded();
+//        }
+//    }
+//    else if (changed == getGraphEditor()->graph)
+//    {
+//        String title = JUCEApplication::getInstance()->getApplicationName();
+//        
+//        File f = getGraphEditor()->graph->getFile();
+//        
+//        if (f.existsAsFile())
+//            title = f.getFileName() + " - " + title;
+//        
+//        setName (title);
+//    }
 //}

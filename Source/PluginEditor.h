@@ -28,6 +28,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
+#include "GraphEditorPanel.h"
 
 
 //==============================================================================
@@ -35,6 +36,7 @@
 */
 class JuceDemoPluginAudioProcessorEditor    : public AudioProcessorEditor
 //                                            , private Timer
+//                                            , public ChangeListener
 {
 public:
     JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor&);
@@ -45,6 +47,8 @@ public:
     void resized() override;
 //    void timerCallback() override;
 
+    //====================================================
+//    void changeListenerCallback (ChangeBroadcaster* changed) override;
 private:
 //    class ParameterSlider;
 //
@@ -59,4 +63,12 @@ private:
     }
 
 //    void updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo);
+    
+    //===============================================================================
+    AudioDeviceManager deviceManager;
+    AudioPluginFormatManager formatManager;
+    OwnedArray<PluginDescription> internalTypes;
+//    GraphDocumentComponent* graphDocumentComponent;
+    ScopedPointer<GraphDocumentComponent> graphDocumentComponent;
+    
 };
