@@ -185,9 +185,8 @@ void JuceDemoPluginAudioProcessorEditor::resized()
 //    gainSlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth() / 2)));
 //    delaySlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth())));
 
-    std::cout << getProcessor().lastUIWidth;
-//    getProcessor().lastUIWidth = getWidth();
-//    getProcessor().lastUIHeight = getHeight();
+    getProcessor().lastUIWidth = getWidth();
+    getProcessor().lastUIHeight = getHeight();
 }
 
 //==============================================================================
