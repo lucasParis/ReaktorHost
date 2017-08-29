@@ -34,18 +34,12 @@ class MainHostWindow::PluginListWindow  : public DocumentWindow
 {
 public:
     PluginListWindow (MainHostWindow& owner_, AudioPluginFormatManager& pluginFormatManager)
-        : DocumentWindow ("Available Plugins",
-                          LookAndFeel::getDefaultLookAndFeel().findColour (ResizableWindow::backgroundColourId),
-                          DocumentWindow::minimiseButton | DocumentWindow::closeButton),
-          owner (owner_)
+        : DocumentWindow ("Available Plugins", LookAndFeel::getDefaultLookAndFeel().findColour (ResizableWindow::backgroundColourId), DocumentWindow::minimiseButton | DocumentWindow::closeButton)
+        , owner (owner_)
     {
-        const File deadMansPedalFile (getAppProperties().getUserSettings()
-                                        ->getFile().getSiblingFile ("RecentlyCrashedPluginsList"));
+        const File deadMansPedalFile (getAppProperties().getUserSettings()->getFile().getSiblingFile ("RecentlyCrashedPluginsList"));
 
-        setContentOwned (new PluginListComponent (pluginFormatManager,
-                                                  owner.knownPluginList,
-                                                  deadMansPedalFile,
-                                                  getAppProperties().getUserSettings(), true), true);
+        setContentOwned (new PluginListComponent (pluginFormatManager, owner.knownPluginList, deadMansPedalFile, getAppProperties().getUserSettings(), true), true);
 
         setResizable (true, false);
         setResizeLimits (300, 400, 800, 1500);
@@ -75,15 +69,12 @@ private:
 
 //==============================================================================
 MainHostWindow::MainHostWindow()
-    : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(),
-                      LookAndFeel::getDefaultLookAndFeel().findColour (ResizableWindow::backgroundColourId),
-                      DocumentWindow::allButtons)
+    : DocumentWindow (JUCEApplication::getInstance()->getApplicationName(), LookAndFeel::getDefaultLookAndFeel().findColour (ResizableWindow::backgroundColourId), DocumentWindow::allButtons)
 {
     formatManager.addDefaultFormats();
     formatManager.addFormat (new InternalPluginFormat());
 
-    ScopedPointer<XmlElement> savedAudioState (getAppProperties().getUserSettings()
-                                                   ->getXmlValue ("audioDeviceState"));
+    ScopedPointer<XmlElement> savedAudioState (getAppProperties().getUserSettings()->getXmlValue ("audioDeviceState"));
 
     deviceManager.initialise (256, 256, savedAudioState, true);
 
@@ -105,8 +96,7 @@ MainHostWindow::MainHostWindow()
     if (savedPluginList != nullptr)
         knownPluginList.recreateFromXml (*savedPluginList);
 
-    pluginSortMethod = (KnownPluginList::SortMethod) getAppProperties().getUserSettings()
-                            ->getIntValue ("pluginSortMethod", KnownPluginList::sortByManufacturer);
+    pluginSortMethod = (KnownPluginList::SortMethod) getAppProperties().getUserSettings()->getIntValue ("pluginSortMethod", KnownPluginList::sortByManufacturer);
 
     knownPluginList.addChangeListener (this);
 
@@ -188,8 +178,7 @@ void MainHostWindow::changeListenerCallback (ChangeBroadcaster* changed)
     {
         menuItemsChanged();
 
-        // save the plugin list every time it gets chnaged, so that if we're scanning
-        // and it crashes, we've still saved the previous ones
+        // save the plugin list every time it gets chnaged, so that if we're scanning and it crashes, we've still saved the previous ones
         ScopedPointer<XmlElement> savedPluginList (knownPluginList.createXml());
 
         if (savedPluginList != nullptr)
@@ -310,9 +299,7 @@ void MainHostWindow::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/
     else
     {
         if (auto* desc = getChosenType (menuItemID))
-            createPlugin (*desc,
-                          { proportionOfWidth  (0.3f + Random::getSystemRandom().nextFloat() * 0.6f),
-                            proportionOfHeight (0.3f + Random::getSystemRandom().nextFloat() * 0.6f) });
+            createPlugin (*desc, { proportionOfWidth  (0.3f + Random::getSystemRandom().nextFloat() * 0.6f), proportionOfHeight (0.3f + Random::getSystemRandom().nextFloat() * 0.6f) });
     }
 }
 
@@ -336,8 +323,7 @@ void MainHostWindow::addPluginsToMenu (PopupMenu& m) const
         int i = 0;
 
         for (auto* t : internalTypes)
-            m.addItem (++i, t->name + " (" + t->pluginFormatName + ")",
-                       graphEditor->graph->getNodeForName (t->name) == nullptr);
+            m.addItem (++i, t->name + " (" + t->pluginFormatName + ")", graphEditor->graph->getNodeForName (t->name) == nullptr);
     }
 
     m.addSeparator();
@@ -509,10 +495,7 @@ bool MainHostWindow::perform (const InvocationInfo& info)
 
 void MainHostWindow::showAudioSettings()
 {
-    AudioDeviceSelectorComponent audioSettingsComp (deviceManager,
-                                                    0, 256,
-                                                    0, 256,
-                                                    true, true, true, false);
+    AudioDeviceSelectorComponent audioSettingsComp (deviceManager, 0, 256, 0, 256, true, true, true, false);
 
     audioSettingsComp.setSize (500, 450);
 

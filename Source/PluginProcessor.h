@@ -108,20 +108,20 @@ private:
     //==============================================================================
     template <typename FloatType>
     void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages, AudioBuffer<FloatType>& delayBuffer);
-    template <typename FloatType>
-    void applyGain (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
-    template <typename FloatType>
-    void applyDelay (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
+//    template <typename FloatType>
+//    void applyGain (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
+//    template <typename FloatType>
+//    void applyDelay (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
 
     AudioBuffer<float> delayBufferFloat;
     AudioBuffer<double> delayBufferDouble;
 
     int delayPosition = 0;
 
-    Synthesiser synth;
-
-    void initialiseSynth();
-    void updateCurrentTimeInfoFromHost();
+//    Synthesiser synth;
+//
+//    void initialiseSynth();
+//    void updateCurrentTimeInfoFromHost();
     static BusesProperties getBusesProperties();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDemoPluginAudioProcessor)

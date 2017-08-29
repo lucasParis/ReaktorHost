@@ -33,8 +33,8 @@
 //==============================================================================
 /** This is the editor component that our filter will display.
 */
-class JuceDemoPluginAudioProcessorEditor  : public AudioProcessorEditor,
-                                            private Timer
+class JuceDemoPluginAudioProcessorEditor    : public AudioProcessorEditor
+//                                            , private Timer
 {
 public:
     JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor&);
@@ -43,14 +43,14 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void timerCallback() override;
+//    void timerCallback() override;
 
 private:
-    class ParameterSlider;
-
-    MidiKeyboardComponent midiKeyboard;
-    Label timecodeDisplayLabel, gainLabel, delayLabel;
-    ScopedPointer<ParameterSlider> gainSlider, delaySlider;
+//    class ParameterSlider;
+//
+//    MidiKeyboardComponent midiKeyboard;
+//    Label timecodeDisplayLabel, gainLabel, delayLabel;
+//    ScopedPointer<ParameterSlider> gainSlider, delaySlider;
 
     //==============================================================================
     JuceDemoPluginAudioProcessor& getProcessor() const
@@ -58,5 +58,5 @@ private:
         return static_cast<JuceDemoPluginAudioProcessor&> (processor);
     }
 
-    void updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo);
+//    void updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo);
 };

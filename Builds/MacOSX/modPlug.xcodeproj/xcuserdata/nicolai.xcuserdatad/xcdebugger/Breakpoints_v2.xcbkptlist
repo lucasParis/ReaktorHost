@@ -6,7 +6,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/PluginProcessor.cpp"
@@ -14,41 +14,23 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "processBlock (AudioBuffer&lt;FloatType&gt;&amp; outputBuffer, int startSample, int numSamples)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "void SineWaveVoice::processBlock&lt;float&gt;(juce::AudioBuffer&lt;float&gt;&amp;, int, int)"
-                  moduleName = "modPlug"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicolai/Documents/git/modPlug/Source/PluginProcessor.cpp"
-                  timestampString = "525708808.194672"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "65">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "void SineWaveVoice::processBlock&lt;double&gt;(juce::AudioBuffer&lt;double&gt;&amp;, int, int)"
-                  moduleName = "modPlug"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nicolai/Documents/git/modPlug/Source/PluginProcessor.cpp"
-                  timestampString = "525708808.202309"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "118"
-                  endingLineNumber = "118"
-                  offsetFromSymbolStart = "65">
-               </Location>
-            </Locations>
+            endingLineNumber = "117">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Source/MainHostWindow.cpp"
+            timestampString = "525709503.750418"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "owner (owner_)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
