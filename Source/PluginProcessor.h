@@ -98,7 +98,7 @@ public:
     // these are used to persist the UI's size - the values are stored along with the
     // filter's other parameters, and the UI component will update them when it gets
     // resized.
-    int lastUIWidth = 400, lastUIHeight = 200;
+    int lastUIWidth = 412, lastUIHeight = 200;
 
     // Our parameters
     AudioParameterFloat* gainParam = nullptr;

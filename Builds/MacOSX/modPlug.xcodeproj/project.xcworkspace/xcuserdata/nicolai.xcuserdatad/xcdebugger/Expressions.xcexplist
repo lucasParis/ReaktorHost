@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "juce::ReferenceCountedObjectPtr&lt;juce::AudioProcessorGraph::Node&gt;::incIfNotNull(juce::AudioProcessorGraph::Node*):juce_ReferenceCountedObject.h">
+      </ContextState>
+      <ContextState
+         contextName = "JuceDemoPluginAudioProcessorEditor::getProcessor() const:PluginEditor.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "static_cast&lt;JuceDemoPluginAudioProcessor&amp;&gt; (processor)">
+            </PersistentString>
+            <PersistentString
+               value = "processor">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FilterGraph::addFilter(juce::PluginDescription const&amp;, juce::Point&lt;double&gt;)::AsyncCallback::completionCallback(juce::AudioPluginInstance*, juce::String const&amp;):FilterGraph.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "desc">
+            </PersistentString>
+            <PersistentString
+               value = "position">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "juce::AudioDeviceManager::insertDefaultDeviceNames(juce::AudioDeviceManager::AudioDeviceSetup&amp;) const:juce_AudioDeviceManager.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor(JuceDemoPluginAudioProcessor&amp;):PluginEditor.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "juce::AudioProcessorGraph::addNode(juce::AudioProcessor*, unsigned int):juce_AudioProcessorGraph.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "nodes.size()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "std::__1::__atomic_base&lt;int, true&gt;::fetch_add(int, std::__1::memory_order) [inlined]:atomic">
+      </ContextState>
+      <ContextState
+         contextName = "juce::ContainerDeletePolicy&lt;juce::AudioProcessorGraph::Node&gt;::destroy(juce::AudioProcessorGraph::Node*):juce_ContainerDeletePolicy.h">
+      </ContextState>
+      <ContextState
+         contextName = "juce::HeapBlock&lt;juce::AudioProcessorGraph::Node*, false&gt;::realloc(unsigned long, unsigned long):juce_HeapBlock.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "data">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "FilterGraph::addFilterCallback(juce::AudioPluginInstance*, juce::String const&amp;, juce::Point&lt;double&gt;):FilterGraph.cpp">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

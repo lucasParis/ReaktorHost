@@ -70,5 +70,6 @@ private:
     OwnedArray<PluginDescription> internalTypes;
 //    GraphDocumentComponent* graphDocumentComponent;
     ScopedPointer<GraphDocumentComponent> graphDocumentComponent;
+    ScopedPointer<ApplicationProperties> appProperties;
     
 };

@@ -113,15 +113,23 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
     
     //===========================================================================
     
+    // initialise our settings file..
+    PropertiesFile::Options options;
+    options.applicationName     = "ModPlug";
+    options.filenameSuffix      = "settings";
+    options.osxLibrarySubFolder = "Preferences";
+    
+    appProperties = new ApplicationProperties();
+    appProperties->setStorageParameters (options);
     
     formatManager.addDefaultFormats();
     formatManager.addFormat (new InternalPluginFormat());
     
-//    ScopedPointer<XmlElement> savedAudioState (getAppProperties().getUserSettings()->getXmlValue ("audioDeviceState"));
+    ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
     
-    deviceManager.initialise (256, 256, nullptr, true);
+    String error = deviceManager.initialise (256, 256, savedAudioState, true);
     
-    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
+//    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
     
 //    restoreWindowStateFromString (getAppProperties().getUserSettings()->getValue ("mainWindowPos"));
     
@@ -177,8 +185,9 @@ void JuceDemoPluginAudioProcessorEditor::resized()
 //    gainSlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth() / 2)));
 //    delaySlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth())));
 
-    getProcessor().lastUIWidth = getWidth();
-    getProcessor().lastUIHeight = getHeight();
+    std::cout << getProcessor().lastUIWidth;
+//    getProcessor().lastUIWidth = getWidth();
+//    getProcessor().lastUIHeight = getHeight();
 }
 
 //==============================================================================
