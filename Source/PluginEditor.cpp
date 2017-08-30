@@ -90,6 +90,7 @@ void ReaktorHostProcessorEditor::timerCallback()
         if (AudioProcessorEditor* instanceEditor = getProcessor().getWrappedInstanceEditor())
         {
             addAndMakeVisible(instanceEditor);
+            setBounds(instanceEditor->getBounds());
             hasEditor = true;
         }
 }
@@ -134,6 +135,10 @@ void ReaktorHostProcessorEditor::fileDragExit (const StringArray&)
 
 void ReaktorHostProcessorEditor::filesDropped (const StringArray& files, int x, int y)
 {
+    //not handling replacing wrapped instance for now
+    if (hasEditor)
+        return;
+    
     OwnedArray<PluginDescription> typesFound;
     knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
     
