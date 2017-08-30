@@ -19,7 +19,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.juce.jucedemoplugin"
+        applicationId "com.juce.reaktorhost"
         minSdkVersion    23
         targetSdkVersion 23
         externalNativeBuild {

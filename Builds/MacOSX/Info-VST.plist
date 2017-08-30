@@ -10,9 +10,9 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
-    <string>modPlug</string>
+    <string>ReaktorHost</string>
     <key>CFBundleDisplayName</key>
-    <string>modPlug</string>
+    <string>ReaktorHost</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
@@ -22,7 +22,7 @@
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
     <key>NSHumanReadableCopyright</key>
-    <string>ROLI Ltd.</string>
+    <string>BMP4</string>
     <key>NSHighResolutionCapable</key>
     <true/>
   </dict>

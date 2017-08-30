@@ -10,9 +10,9 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleName</key>
-    <string>modPlug</string>
+    <string>ReaktorHost</string>
     <key>CFBundleDisplayName</key>
-    <string>modPlug</string>
+    <string>ReaktorHost</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
     <key>CFBundleSignature</key>
@@ -22,24 +22,24 @@
     <key>CFBundleVersion</key>
     <string>1.0.0</string>
     <key>NSHumanReadableCopyright</key>
-    <string>ROLI Ltd.</string>
+    <string>BMP4</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>AudioComponents</key>
     <array>
       <dict>
         <key>name</key>
-        <string>BMP4: modPlug</string>
+        <string>BMP4: ReaktorHost</string>
         <key>description</key>
-        <string>modPlug</string>
+        <string>ReaktorHost</string>
         <key>factoryFunction</key>
-        <string>JuceDemoProjectAUFactory</string>
+        <string>ReaktorHostAUFactory</string>
         <key>manufacturer</key>
         <string>BMP4</string>
         <key>type</key>
         <string>aumf</string>
         <key>subtype</key>
-        <string>MdPl</string>
+        <string>RHst</string>
         <key>version</key>
         <integer>65536</integer>
       </dict>

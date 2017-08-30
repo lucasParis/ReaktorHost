@@ -136,7 +136,7 @@
 // juce_audio_processors flags:
 
 #ifndef    JUCE_PLUGINHOST_VST
- #define   JUCE_PLUGINHOST_VST 1
+ #define   JUCE_PLUGINHOST_VST 0
 #endif
 
 #ifndef    JUCE_PLUGINHOST_VST3
@@ -277,25 +277,25 @@
  #define JucePlugin_Enable_IAA             0
 #endif
 #ifndef  JucePlugin_Name
- #define JucePlugin_Name                   "modPlug"
+ #define JucePlugin_Name                   "ReaktorHost"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "modPlug"
+ #define JucePlugin_Desc                   "ReaktorHost"
 #endif
 #ifndef  JucePlugin_Manufacturer
  #define JucePlugin_Manufacturer           "BMP4"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
- #define JucePlugin_ManufacturerWebsite    "www.juce.com"
+ #define JucePlugin_ManufacturerWebsite    ""
 #endif
 #ifndef  JucePlugin_ManufacturerEmail
- #define JucePlugin_ManufacturerEmail      "info@juce.com"
+ #define JucePlugin_ManufacturerEmail      ""
 #endif
 #ifndef  JucePlugin_ManufacturerCode
  #define JucePlugin_ManufacturerCode       0x424d5034 // 'BMP4'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x4d64506c // 'MdPl'
+ #define JucePlugin_PluginCode             0x52487374 // 'RHst'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0
@@ -334,16 +334,16 @@
  #define JucePlugin_AUSubType              JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_AUExportPrefix
- #define JucePlugin_AUExportPrefix         JuceDemoProjectAU
+ #define JucePlugin_AUExportPrefix         ReaktorHostAU
 #endif
 #ifndef  JucePlugin_AUExportPrefixQuoted
- #define JucePlugin_AUExportPrefixQuoted   "JuceDemoProjectAU"
+ #define JucePlugin_AUExportPrefixQuoted   "ReaktorHostAU"
 #endif
 #ifndef  JucePlugin_AUManufacturerCode
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.juce.JuceDemoPlugin
+ #define JucePlugin_CFBundleIdentifier     com.juce.ReaktorHost
 #endif
 #ifndef  JucePlugin_RTASCategory
  #define JucePlugin_RTASCategory           ePlugInCategory_None
@@ -361,7 +361,7 @@
  #define JucePlugin_RTASDisableMultiMono   0
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.JuceDemoPlugin
+ #define JucePlugin_AAXIdentifier          
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
@@ -385,5 +385,5 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "BMP4: modPlug"
+ #define JucePlugin_IAAName                "BMP4: ReaktorHost"
 #endif
