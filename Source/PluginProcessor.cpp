@@ -428,9 +428,13 @@ void JuceDemoPluginAudioProcessor::addFilterCallback (AudioPluginInstance* insta
     }
     else
     {
-        instance->enableAllBuses();
         wrappedInstance = nullptr;
         wrappedInstance = instance;
+        
+        wrappedInstance->prepareToPlay(getSampleRate(), getBlockSize());
+        
+        wrappedInstance->enableAllBuses();
+        
     }
 }
 

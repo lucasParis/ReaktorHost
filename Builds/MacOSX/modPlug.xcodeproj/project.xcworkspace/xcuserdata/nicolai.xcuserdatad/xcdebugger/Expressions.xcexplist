@@ -11,6 +11,20 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
+         contextName = "juce::VSTPluginInstance::processBlock(juce::AudioBuffer&lt;float&gt;&amp;, juce::MidiBuffer&amp;):juce_VSTPluginFormat.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "tmpBufferFloat">
+            </PersistentString>
+            <PersistentString
+               value = "channelBufferDouble">
+            </PersistentString>
+            <PersistentString
+               value = "channelBufferFloat">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "JuceDemoPluginAudioProcessorEditor::filesDropped(juce::StringArray const&amp;, int, int):PluginEditor.cpp">
       </ContextState>
       <ContextState
