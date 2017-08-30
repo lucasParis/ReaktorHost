@@ -126,7 +126,8 @@ private:
 //    void updateCurrentTimeInfoFromHost();
     static BusesProperties getBusesProperties();
     
-    AudioPluginInstance* wrappedInstance;
+//    AudioPluginInstance* wrappedInstance;
+    ScopedPointer<AudioPluginInstance> wrappedInstance;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDemoPluginAudioProcessor)
 };
