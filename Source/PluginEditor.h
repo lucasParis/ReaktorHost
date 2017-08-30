@@ -32,8 +32,9 @@
 
 
 
-class ReaktorHostProcessorEditor    : public AudioProcessorEditor
-                                            , public FileDragAndDropTarget
+class ReaktorHostProcessorEditor : public AudioProcessorEditor
+                                 , private Timer
+                                 , public FileDragAndDropTarget
 {
 public:
     ReaktorHostProcessorEditor (ReaktorHostProcessor&);
@@ -42,6 +43,7 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
     bool isInterestedInFileDrag (const StringArray&) override;
     void fileDragEnter (const StringArray&, int, int) override;
@@ -55,13 +57,13 @@ private:
     {
         return static_cast<ReaktorHostProcessor&> (processor);
     }
+    
     void createPlugin (const PluginDescription& desc, Point<int> p);
-
-    ReaktorHostProcessor& processor;
-
 
     AudioPluginFormatManager formatManager;
     KnownPluginList knownPluginList;
+    
+    bool hasEditor = false;
 
 //    AudioDeviceManager deviceManager;
 //    OwnedArray<PluginDescription> internalTypes;

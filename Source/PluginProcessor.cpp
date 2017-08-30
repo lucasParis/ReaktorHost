@@ -33,7 +33,9 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 ReaktorHostProcessor::ReaktorHostProcessor()
     : AudioProcessor (getBusesProperties())
     , wrappedInstance(nullptr)
+    , wrappedInstanceEditor (nullptr)
 {
+    
 }
 
 ReaktorHostProcessor::~ReaktorHostProcessor()
@@ -51,7 +53,6 @@ bool ReaktorHostProcessor::isBusesLayoutSupported (const BusesLayout& layouts) c
     }
     else
     {
-    
         // Only mono/stereo and input/output must have same layout
         const AudioChannelSet& mainOutput = layouts.getMainOutputChannelSet();
         const AudioChannelSet& mainInput  = layouts.getMainInputChannelSet();
@@ -74,7 +75,6 @@ bool ReaktorHostProcessor::isBusesLayoutSupported (const BusesLayout& layouts) c
 
 AudioProcessor::BusesProperties ReaktorHostProcessor::getBusesProperties()
 {
-    
     return BusesProperties().withInput  ("Input",  AudioChannelSet::stereo(), true)
                             .withOutput ("Output", AudioChannelSet::stereo(), true);
 }
@@ -109,6 +109,15 @@ void ReaktorHostProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& 
 AudioProcessorEditor* ReaktorHostProcessor::createEditor()
 {
     return new ReaktorHostProcessorEditor (*this);
+}
+
+AudioProcessorEditor* ReaktorHostProcessor::getWrappedInstanceEditor() const
+{
+//    if (wrappedInstanceEditor != nullptr)
+//        return wrappedInstance->getActiveEditor();
+//    else
+//        return nullptr;
+    return wrappedInstanceEditor;
 }
 
 //==============================================================================
@@ -176,13 +185,13 @@ void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, con
     }
     else
     {
+        instance->prepareToPlay(getSampleRate(), getBlockSize());
+        instance->enableAllBuses();        
+        
         wrappedInstance = nullptr;
+        wrappedInstanceEditor = nullptr;
         wrappedInstance = instance;
-        
-        wrappedInstance->prepareToPlay(getSampleRate(), getBlockSize());
-        
-        wrappedInstance->enableAllBuses();
-        
+        wrappedInstanceEditor = instance->createEditor();
     }
 }
 

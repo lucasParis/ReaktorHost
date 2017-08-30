@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "juce::ReferenceCountedObjectPtr&lt;juce::WeakReference&lt;juce::Component, juce::ReferenceCountedObject&gt;::SharedPointer&gt;::operator juce::WeakReference&lt;juce::Component, juce::ReferenceCountedObject&gt;::SharedPointer*() const:juce_ReferenceCountedObject.h">
+         <PersistentStrings>
+            <PersistentString
+               value = "referencedObject">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

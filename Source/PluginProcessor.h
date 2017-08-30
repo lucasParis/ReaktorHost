@@ -55,6 +55,7 @@ public:
     //==============================================================================
     bool hasEditor() const override                                             { return true; }
     AudioProcessorEditor* createEditor() override;
+    AudioProcessorEditor* getWrappedInstanceEditor() const;
 
     //==============================================================================
     const String getName() const override                                       { return JucePlugin_Name; }
@@ -87,6 +88,7 @@ private:
     static BusesProperties getBusesProperties();
     
     ScopedPointer<AudioPluginInstance> wrappedInstance;
+    ScopedPointer<AudioProcessorEditor> wrappedInstanceEditor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };

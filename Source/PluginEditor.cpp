@@ -32,7 +32,6 @@
 
 ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& owner)
     : AudioProcessorEditor (owner)
-    , processor(owner)
 {
     // set resize limits for this plug-in
     setResizeLimits (400, 200, 1600, 800);
@@ -74,7 +73,7 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
 //    if (auto* filterGraph = graphDocumentComponent->graph.get())
 //        filterGraph->addChangeListener (this);
     
-    
+    startTimerHz (30);
     setVisible (true);
 }
 
@@ -84,6 +83,18 @@ ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 }
 
 //==============================================================================
+//==============================================================================
+void ReaktorHostProcessorEditor::timerCallback()
+{
+    if (!hasEditor)
+        if (AudioProcessorEditor* instanceEditor = getProcessor().getWrappedInstanceEditor())
+        {
+            addAndMakeVisible(instanceEditor);
+            hasEditor = true;
+        }
+}
+
+
 void ReaktorHostProcessorEditor::paint (Graphics& g)
 {
     g.setColour (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
@@ -149,6 +160,6 @@ void ReaktorHostProcessorEditor::createPlugin (const PluginDescription& desc, Po
         Point<int> position;
     };
     
-    formatManager.createPluginInstanceAsync (desc, processor.getSampleRate(), processor.getBlockSize(), new AsyncCallback (processor, p));
+    formatManager.createPluginInstanceAsync (desc, processor.getSampleRate(), getProcessor().getBlockSize(), new AsyncCallback (getProcessor(), p));
 }
 
