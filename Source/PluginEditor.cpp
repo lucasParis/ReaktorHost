@@ -29,112 +29,35 @@
 #include "InternalFilters.h"
 #include "GraphEditorPanel.h"
 
-//==============================================================================
-// This is a handy slider subclass that controls an AudioProcessorParameter
-// (may move this class into the library itself at some point in the future..)
-//class JuceDemoPluginAudioProcessorEditor::ParameterSlider   : public Slider,
-//                                                              private Timer
-//{
-//public:
-//    ParameterSlider (AudioProcessorParameter& p)
-//        : Slider (p.getName (256)), param (p)
-//    {
-//        setRange (0.0, 1.0, 0.0);
-//        startTimerHz (30);
-//        updateSliderPos();
-//    }
-//
-//    void valueChanged() override
-//    {
-//        if (isMouseButtonDown())
-//            param.setValueNotifyingHost ((float) Slider::getValue());
-//        else
-//            param.setValue ((float) Slider::getValue());
-//    }
-//
-//    void timerCallback() override       { updateSliderPos(); }
-//
-//    void startedDragging() override     { param.beginChangeGesture(); }
-//    void stoppedDragging() override     { param.endChangeGesture();   }
-//
-//    double getValueFromText (const String& text) override   { return param.getValueForText (text); }
-//    String getTextFromValue (double value) override         { return param.getText ((float) value, 1024); }
-//
-//    void updateSliderPos()
-//    {
-//        const float newValue = param.getValue();
-//
-//        if (newValue != (float) Slider::getValue() && ! isMouseButtonDown())
-//            Slider::setValue (newValue);
-//    }
-//
-//    AudioProcessorParameter& param;
-//
-//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParameterSlider)
-//};
 
-//==============================================================================
 JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor& owner)
     : AudioProcessorEditor (owner)
     , processor(owner)
-//    , midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
-//      timecodeDisplayLabel (String()),
-//      gainLabel (String(), "VBThroughput level:"),
-//      delayLabel (String(), "Delay:")
 {
-    // add some sliders..
-//    addAndMakeVisible (gainSlider = new ParameterSlider (*owner.gainParam));
-//    gainSlider->setSliderStyle (Slider::Rotary);
-//
-//    addAndMakeVisible (delaySlider = new ParameterSlider (*owner.delayParam));
-//    delaySlider->setSliderStyle (Slider::Rotary);
-//
-//    // add some labels for the sliders..
-//    gainLabel.attachToComponent (gainSlider, false);
-//    gainLabel.setFont (Font (11.0f));
-//
-//    delayLabel.attachToComponent (delaySlider, false);
-//    delayLabel.setFont (Font (11.0f));
-//
-//    // add the midi keyboard component..
-//    addAndMakeVisible (midiKeyboard);
-//
-//    // add a label that will display the current timecode and status..
-//    addAndMakeVisible (timecodeDisplayLabel);
-//    timecodeDisplayLabel.setFont (Font (Font::getDefaultMonospacedFontName(), 15.0f, Font::plain));
-//
     // set resize limits for this plug-in
-    setResizeLimits (400, 200, 800, 300);
+    setResizeLimits (400, 200, 1600, 800);
 
     // set our component's initial size to be the last one that was stored in the filter's settings
     setSize (owner.lastUIWidth, owner.lastUIHeight);
-
-    // start a timer which will keep our timecode display updated
-//    startTimerHz (30);
-    
-    //===========================================================================
     
     // initialise our settings file..
-    PropertiesFile::Options options;
-    options.applicationName     = "ModPlug";
-    options.filenameSuffix      = "settings";
-    options.osxLibrarySubFolder = "Preferences";
-    
-    appProperties = new ApplicationProperties();
-    appProperties->setStorageParameters (options);
+//    PropertiesFile::Options options;
+//    options.applicationName     = "ModPlug";
+//    options.filenameSuffix      = "settings";
+//    options.osxLibrarySubFolder = "Preferences";
+//    
+//    appProperties = new ApplicationProperties();
+//    appProperties->setStorageParameters (options);
     
     formatManager.addDefaultFormats();
-//    formatManager.addFormat (new InternalPluginFormat());
-    
-    ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
-    
-    String error = deviceManager.initialise (256, 256, savedAudioState, true);
+//    
+//    ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
+//    
+//    String error = deviceManager.initialise (256, 256, savedAudioState, true);
 
 //    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
     
 //    restoreWindowStateFromString (getAppProperties().getUserSettings()->getValue ("mainWindowPos"));
-    
-    setVisible (true);
     
 //    InternalPluginFormat internalFormat;
 //    internalFormat.getAllTypes (internalTypes);
@@ -152,17 +75,12 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
 //        filterGraph->addChangeListener (this);
     
     
-//    addKeyListener (getCommandManager().getKeyMappings());
-    
-//    Process::setPriority (Process::HighPriority);
-    
-    
-//    getCommandManager().setFirstCommandTarget (this);
+    setVisible (true);
 }
 
 JuceDemoPluginAudioProcessorEditor::~JuceDemoPluginAudioProcessorEditor()
 {
-    graphDocumentComponent = nullptr;
+//    graphDocumentComponent = nullptr;
 }
 
 //==============================================================================
@@ -174,13 +92,9 @@ void JuceDemoPluginAudioProcessorEditor::paint (Graphics& g)
 
 void JuceDemoPluginAudioProcessorEditor::resized()
 {
-    // This lays out our child components...
-
-    Rectangle<int> r (getLocalBounds().reduced (8));
-
+//    Rectangle<int> r (getLocalBounds().reduced (8));
 //    timecodeDisplayLabel.setBounds (r.removeFromTop (26));
 //    midiKeyboard.setBounds (r.removeFromBottom (70));
-//
 //    r.removeFromTop (20);
 //    Rectangle<int> sliderArea (r.removeFromTop (60));
 //    gainSlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth() / 2)));
@@ -189,91 +103,6 @@ void JuceDemoPluginAudioProcessorEditor::resized()
     getProcessor().lastUIWidth = getWidth();
     getProcessor().lastUIHeight = getHeight();
 }
-
-//==============================================================================
-//void JuceDemoPluginAudioProcessorEditor::timerCallback()
-//{
-//    updateTimecodeDisplay (getProcessor().lastPosInfo);
-//}
-
-//==============================================================================
-// quick-and-dirty function to format a timecode string
-//static String timeToTimecodeString (double seconds)
-//{
-//    const int millisecs = roundToInt (seconds * 1000.0);
-//    const int absMillisecs = std::abs (millisecs);
-//
-//    return String::formatted ("%02d:%02d:%02d.%03d",
-//                              millisecs / 3600000,
-//                              (absMillisecs / 60000) % 60,
-//                              (absMillisecs / 1000) % 60,
-//                              absMillisecs % 1000);
-//}
-//
-//// quick-and-dirty function to format a bars/beats string
-//static String quarterNotePositionToBarsBeatsString (double quarterNotes, int numerator, int denominator)
-//{
-//    if (numerator == 0 || denominator == 0)
-//        return "1|1|000";
-//
-//    const int quarterNotesPerBar = (numerator * 4 / denominator);
-//    const double beats  = (fmod (quarterNotes, quarterNotesPerBar) / quarterNotesPerBar) * numerator;
-//
-//    const int bar    = ((int) quarterNotes) / quarterNotesPerBar + 1;
-//    const int beat   = ((int) beats) + 1;
-//    const int ticks  = ((int) (fmod (beats, 1.0) * 960.0 + 0.5));
-//
-//    return String::formatted ("%d|%d|%03d", bar, beat, ticks);
-//}
-//
-//// Updates the text in our position label.
-//void JuceDemoPluginAudioProcessorEditor::updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo pos)
-//{
-//    MemoryOutputStream displayText;
-//
-//    displayText << "[" << SystemStats::getJUCEVersion() << "]   "
-//                << String (pos.bpm, 2) << " bpm, "
-//                << pos.timeSigNumerator << '/' << pos.timeSigDenominator
-//                << "  -  " << timeToTimecodeString (pos.timeInSeconds)
-//                << "  -  " << quarterNotePositionToBarsBeatsString (pos.ppqPosition,
-//                                                                    pos.timeSigNumerator,
-//                                                                    pos.timeSigDenominator);
-//
-//    if (pos.isRecording)
-//        displayText << "  (recording)";
-//    else if (pos.isPlaying)
-//        displayText << "  (playing)";
-//
-//    timecodeDisplayLabel.setText (displayText.toString(), dontSendNotification);
-//}
-
-//void JuceDemoPluginAudioProcessorEditor::changeListenerCallback (ChangeBroadcaster* changed)
-//{
-//    if (changed == &knownPluginList)
-//    {
-//        menuItemsChanged();
-//        
-//        // save the plugin list every time it gets chnaged, so that if we're scanning and it crashes, we've still saved the previous ones
-//        ScopedPointer<XmlElement> savedPluginList (knownPluginList.createXml());
-//        
-//        if (savedPluginList != nullptr)
-//        {
-//            getAppProperties().getUserSettings()->setValue ("pluginList", savedPluginList);
-//            getAppProperties().saveIfNeeded();
-//        }
-//    }
-//    else if (changed == getGraphEditor()->graph)
-//    {
-//        String title = JUCEApplication::getInstance()->getApplicationName();
-//        
-//        File f = getGraphEditor()->graph->getFile();
-//        
-//        if (f.existsAsFile())
-//            title = f.getFileName() + " - " + title;
-//        
-//        setName (title);
-//    }
-//}
 
 bool JuceDemoPluginAudioProcessorEditor::isInterestedInFileDrag (const StringArray&)
 {
@@ -294,26 +123,14 @@ void JuceDemoPluginAudioProcessorEditor::fileDragExit (const StringArray&)
 
 void JuceDemoPluginAudioProcessorEditor::filesDropped (const StringArray& files, int x, int y)
 {
-//    if (auto* graphEditor = getGraphEditor())
-//    {
-//        if (files.size() == 1 && File (files[0]).hasFileExtension (filenameSuffix))
-//        {
-//            if (auto* filterGraph = graphEditor->graph.get())
-//                if (filterGraph->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
-//                    filterGraph->loadFrom (File (files[0]), true);
-//        }
-//        else
-        {
-            OwnedArray<PluginDescription> typesFound;
-            knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
-            
-            auto pos = getLocalPoint (this, Point<int> (x, y));
-            
-            for (int i = 0; i < jmin (5, typesFound.size()); ++i)
-                if (auto* desc = typesFound.getUnchecked(i))
-                    createPlugin (*desc, pos);
-        }
-//    }
+    OwnedArray<PluginDescription> typesFound;
+    knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
+    
+    auto pos = getLocalPoint (this, Point<int> (x, y));
+    
+    for (int i = 0; i < jmin (5, typesFound.size()); ++i)
+        if (auto* desc = typesFound.getUnchecked(i))
+            createPlugin (*desc, pos);
 }
 
 void JuceDemoPluginAudioProcessorEditor::createPlugin (const PluginDescription& desc, Point<int> p)

@@ -31,12 +31,8 @@
 #include "GraphEditorPanel.h"
 
 
-//==============================================================================
-/** This is the editor component that our filter will display.
-*/
+
 class JuceDemoPluginAudioProcessorEditor    : public AudioProcessorEditor
-//                                            , private Timer
-//                                            , public ChangeListener
                                             , public FileDragAndDropTarget
 {
 public:
@@ -46,38 +42,30 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-//    void timerCallback() override;
 
-    //====================================================
-//    void changeListenerCallback (ChangeBroadcaster* changed) override;
     bool isInterestedInFileDrag (const StringArray&) override;
     void fileDragEnter (const StringArray&, int, int) override;
     void fileDragMove (const StringArray&, int, int) override;
     void fileDragExit (const StringArray&) override;
     void filesDropped (const StringArray& files, int x, int y) override;
-private:
-//    class ParameterSlider;
-//
-//    MidiKeyboardComponent midiKeyboard;
-//    Label timecodeDisplayLabel, gainLabel, delayLabel;
-//    ScopedPointer<ParameterSlider> gainSlider, delaySlider;
 
-    //==============================================================================
+private:
+
     JuceDemoPluginAudioProcessor& getProcessor() const
     {
         return static_cast<JuceDemoPluginAudioProcessor&> (processor);
     }
     void createPlugin (const PluginDescription& desc, Point<int> p);
 
-//    void updateTimecodeDisplay (AudioPlayHead::CurrentPositionInfo);
-    
-    //===============================================================================
-    AudioDeviceManager deviceManager;
-    AudioPluginFormatManager formatManager;
-    OwnedArray<PluginDescription> internalTypes;
-//    GraphDocumentComponent* graphDocumentComponent;
-    ScopedPointer<GraphDocumentComponent> graphDocumentComponent;
-    ScopedPointer<ApplicationProperties> appProperties;
-    KnownPluginList knownPluginList;
     JuceDemoPluginAudioProcessor& processor;
+
+
+    AudioPluginFormatManager formatManager;
+    KnownPluginList knownPluginList;
+
+//    AudioDeviceManager deviceManager;
+//    OwnedArray<PluginDescription> internalTypes;
+//    ScopedPointer<GraphDocumentComponent> graphDocumentComponent;
+//    ScopedPointer<ApplicationProperties> appProperties;
+
 };

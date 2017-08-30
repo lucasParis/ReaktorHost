@@ -28,11 +28,6 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-
-//==============================================================================
-/**
-    As the name suggest, this class does the actual audio processing.
-*/
 class JuceDemoPluginAudioProcessor  : public AudioProcessor
 {
 public:
@@ -49,14 +44,12 @@ public:
     //==============================================================================
     void processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages) override
     {
-        jassert (! isUsingDoublePrecision());
-        process (buffer, midiMessages, delayBufferFloat);
+        process (buffer, midiMessages);
     }
 
     void processBlock (AudioBuffer<double>& buffer, MidiBuffer& midiMessages) override
     {
-        jassert (isUsingDoublePrecision());
-        process (buffer, midiMessages, delayBufferDouble);
+        process (buffer, midiMessages);
     }
 
     //==============================================================================
@@ -82,51 +75,17 @@ public:
     void getStateInformation (MemoryBlock&) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    //==============================================================================
-    // These properties are public so that our editor component can access them
-    // A bit of a hacky way to do it, but it's only a demo! Obviously in your own
-    // code you'll do this much more neatly..
-
-    // this is kept up to date with the midi messages that arrive, and the UI component
-    // registers with it so it can represent the incoming messages
-    MidiKeyboardState keyboardState;
-
-    // this keeps a copy of the last set of time info that was acquired during an audio
-    // callback - the UI component will read this and display it.
-    AudioPlayHead::CurrentPositionInfo lastPosInfo;
-
-    // these are used to persist the UI's size - the values are stored along with the
-    // filter's other parameters, and the UI component will update them when it gets
-    // resized.
-    int lastUIWidth = 412, lastUIHeight = 200;
-
-    // Our parameters
-//    AudioParameterFloat* gainParam = nullptr;
-//    AudioParameterFloat* delayParam = nullptr;
+    // these are used to persist the UI's size
+    int lastUIWidth = 400, lastUIHeight = 200;
     
     void addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos);
 
 private:
     //==============================================================================
     template <typename FloatType>
-    void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages, AudioBuffer<FloatType>& delayBuffer);
-//    template <typename FloatType>
-//    void applyGain (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
-//    template <typename FloatType>
-//    void applyDelay (AudioBuffer<FloatType>&, AudioBuffer<FloatType>& delayBuffer);
-
-    AudioBuffer<float> delayBufferFloat;
-    AudioBuffer<double> delayBufferDouble;
-
-    int delayPosition = 0;
-
-//    Synthesiser synth;
-//
-//    void initialiseSynth();
-//    void updateCurrentTimeInfoFromHost();
+    void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages);
     static BusesProperties getBusesProperties();
     
-//    AudioPluginInstance* wrappedInstance;
     ScopedPointer<AudioPluginInstance> wrappedInstance;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDemoPluginAudioProcessor)
