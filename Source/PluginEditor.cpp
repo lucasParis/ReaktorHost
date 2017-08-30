@@ -30,7 +30,7 @@
 #include "GraphEditorPanel.h"
 
 
-JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor& owner)
+ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& owner)
     : AudioProcessorEditor (owner)
     , processor(owner)
 {
@@ -78,19 +78,19 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
     setVisible (true);
 }
 
-JuceDemoPluginAudioProcessorEditor::~JuceDemoPluginAudioProcessorEditor()
+ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 {
 //    graphDocumentComponent = nullptr;
 }
 
 //==============================================================================
-void JuceDemoPluginAudioProcessorEditor::paint (Graphics& g)
+void ReaktorHostProcessorEditor::paint (Graphics& g)
 {
     g.setColour (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.fillAll();
 }
 
-void JuceDemoPluginAudioProcessorEditor::resized()
+void ReaktorHostProcessorEditor::resized()
 {
 //    Rectangle<int> r (getLocalBounds().reduced (8));
 //    timecodeDisplayLabel.setBounds (r.removeFromTop (26));
@@ -104,24 +104,24 @@ void JuceDemoPluginAudioProcessorEditor::resized()
     getProcessor().lastUIHeight = getHeight();
 }
 
-bool JuceDemoPluginAudioProcessorEditor::isInterestedInFileDrag (const StringArray&)
+bool ReaktorHostProcessorEditor::isInterestedInFileDrag (const StringArray&)
 {
     return true;
 }
 
-void JuceDemoPluginAudioProcessorEditor::fileDragEnter (const StringArray&, int, int)
+void ReaktorHostProcessorEditor::fileDragEnter (const StringArray&, int, int)
 {
 }
 
-void JuceDemoPluginAudioProcessorEditor::fileDragMove (const StringArray&, int, int)
+void ReaktorHostProcessorEditor::fileDragMove (const StringArray&, int, int)
 {
 }
 
-void JuceDemoPluginAudioProcessorEditor::fileDragExit (const StringArray&)
+void ReaktorHostProcessorEditor::fileDragExit (const StringArray&)
 {
 }
 
-void JuceDemoPluginAudioProcessorEditor::filesDropped (const StringArray& files, int x, int y)
+void ReaktorHostProcessorEditor::filesDropped (const StringArray& files, int x, int y)
 {
     OwnedArray<PluginDescription> typesFound;
     knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
@@ -133,11 +133,11 @@ void JuceDemoPluginAudioProcessorEditor::filesDropped (const StringArray& files,
             createPlugin (*desc, pos);
 }
 
-void JuceDemoPluginAudioProcessorEditor::createPlugin (const PluginDescription& desc, Point<int> p)
+void ReaktorHostProcessorEditor::createPlugin (const PluginDescription& desc, Point<int> p)
 {
     struct AsyncCallback : public AudioPluginFormat::InstantiationCompletionCallback
     {
-        AsyncCallback (JuceDemoPluginAudioProcessor& g, Point<int> pos)  : owner (g), position (pos)
+        AsyncCallback (ReaktorHostProcessor& g, Point<int> pos)  : owner (g), position (pos)
         {}
         
         void completionCallback (AudioPluginInstance* instance, const String& error) override
@@ -145,7 +145,7 @@ void JuceDemoPluginAudioProcessorEditor::createPlugin (const PluginDescription& 
             owner.addFilterCallback (instance, error, position);
         }
         
-        JuceDemoPluginAudioProcessor& owner;
+        ReaktorHostProcessor& owner;
         Point<int> position;
     };
     

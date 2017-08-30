@@ -28,12 +28,12 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-class JuceDemoPluginAudioProcessor  : public AudioProcessor
+class ReaktorHostProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    JuceDemoPluginAudioProcessor();
-    ~JuceDemoPluginAudioProcessor();
+    ReaktorHostProcessor();
+    ~ReaktorHostProcessor();
 
     //==============================================================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
@@ -88,5 +88,5 @@ private:
     
     ScopedPointer<AudioPluginInstance> wrappedInstance;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDemoPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };

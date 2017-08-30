@@ -30,18 +30,18 @@
 AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
 
-JuceDemoPluginAudioProcessor::JuceDemoPluginAudioProcessor()
+ReaktorHostProcessor::ReaktorHostProcessor()
     : AudioProcessor (getBusesProperties())
     , wrappedInstance(nullptr)
 {
 }
 
-JuceDemoPluginAudioProcessor::~JuceDemoPluginAudioProcessor()
+ReaktorHostProcessor::~ReaktorHostProcessor()
 {
 }
 
 
-bool JuceDemoPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ReaktorHostProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     if (wrappedInstance != nullptr)
     {
@@ -72,7 +72,7 @@ bool JuceDemoPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
     }
 }
 
-AudioProcessor::BusesProperties JuceDemoPluginAudioProcessor::getBusesProperties()
+AudioProcessor::BusesProperties ReaktorHostProcessor::getBusesProperties()
 {
     
     return BusesProperties().withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -80,39 +80,39 @@ AudioProcessor::BusesProperties JuceDemoPluginAudioProcessor::getBusesProperties
 }
 
 //==============================================================================
-void JuceDemoPluginAudioProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
+void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->prepareToPlay(newSampleRate, samplesPerBlock);
 }
 
-void JuceDemoPluginAudioProcessor::releaseResources()
+void ReaktorHostProcessor::releaseResources()
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->releaseResources();
 }
 
-void JuceDemoPluginAudioProcessor::reset()
+void ReaktorHostProcessor::reset()
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->reset();
 }
 
 template <typename FloatType>
-void JuceDemoPluginAudioProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages)
+void ReaktorHostProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages)
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->processBlock(buffer, midiMessages);
 }
 
 //==============================================================================
-AudioProcessorEditor* JuceDemoPluginAudioProcessor::createEditor()
+AudioProcessorEditor* ReaktorHostProcessor::createEditor()
 {
-    return new JuceDemoPluginAudioProcessorEditor (*this);
+    return new ReaktorHostProcessorEditor (*this);
 }
 
 //==============================================================================
-void JuceDemoPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
+void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->getStateInformation(destData);
@@ -138,7 +138,7 @@ void JuceDemoPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
     }
 }
 
-void JuceDemoPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     if (wrappedInstance != nullptr)
         wrappedInstance->setStateInformation (data, sizeInBytes);
@@ -168,7 +168,7 @@ void JuceDemoPluginAudioProcessor::setStateInformation (const void* data, int si
     }
 }
 
-void JuceDemoPluginAudioProcessor::addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos)
+void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos)
 {
     if (instance == nullptr)
     {
@@ -190,5 +190,5 @@ void JuceDemoPluginAudioProcessor::addFilterCallback (AudioPluginInstance* insta
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new JuceDemoPluginAudioProcessor();
+    return new ReaktorHostProcessor();
 }

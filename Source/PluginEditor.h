@@ -32,12 +32,12 @@
 
 
 
-class JuceDemoPluginAudioProcessorEditor    : public AudioProcessorEditor
+class ReaktorHostProcessorEditor    : public AudioProcessorEditor
                                             , public FileDragAndDropTarget
 {
 public:
-    JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor&);
-    ~JuceDemoPluginAudioProcessorEditor();
+    ReaktorHostProcessorEditor (ReaktorHostProcessor&);
+    ~ReaktorHostProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
@@ -51,13 +51,13 @@ public:
 
 private:
 
-    JuceDemoPluginAudioProcessor& getProcessor() const
+    ReaktorHostProcessor& getProcessor() const
     {
-        return static_cast<JuceDemoPluginAudioProcessor&> (processor);
+        return static_cast<ReaktorHostProcessor&> (processor);
     }
     void createPlugin (const PluginDescription& desc, Point<int> p);
 
-    JuceDemoPluginAudioProcessor& processor;
+    ReaktorHostProcessor& processor;
 
 
     AudioPluginFormatManager formatManager;
