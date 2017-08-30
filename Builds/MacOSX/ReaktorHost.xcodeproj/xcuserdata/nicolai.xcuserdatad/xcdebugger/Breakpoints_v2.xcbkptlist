@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Source/PluginProcessor.cpp"
-            timestampString = "525811546.059744"
+            timestampString = "525818557.029655"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, const String&amp; error, Point&lt;int&gt; pos)"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "ReaktorHostProcessor::getStateInformation (MemoryBlock&amp; destData)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
