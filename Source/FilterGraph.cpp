@@ -106,8 +106,7 @@ void FilterGraph::addFilter (const PluginDescription& desc, Point<double> p)
         Point<double> position;
     };
 
-    formatManager.createPluginInstanceAsync (desc, graph.getSampleRate(), graph.getBlockSize(),
-                                             new AsyncCallback (*this, p));
+    formatManager.createPluginInstanceAsync (desc, graph.getSampleRate(), graph.getBlockSize(), new AsyncCallback (*this, p));
 }
 
 void FilterGraph::addFilterCallback (AudioPluginInstance* instance, const String& error, Point<double> pos)

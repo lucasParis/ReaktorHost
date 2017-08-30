@@ -101,8 +101,10 @@ public:
     int lastUIWidth = 412, lastUIHeight = 200;
 
     // Our parameters
-    AudioParameterFloat* gainParam = nullptr;
-    AudioParameterFloat* delayParam = nullptr;
+//    AudioParameterFloat* gainParam = nullptr;
+//    AudioParameterFloat* delayParam = nullptr;
+    
+    void addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos);
 
 private:
     //==============================================================================
@@ -123,6 +125,8 @@ private:
 //    void initialiseSynth();
 //    void updateCurrentTimeInfoFromHost();
     static BusesProperties getBusesProperties();
+    
+    AudioPluginInstance* wrappedInstance;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JuceDemoPluginAudioProcessor)
 };

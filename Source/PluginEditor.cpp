@@ -76,6 +76,7 @@
 //==============================================================================
 JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemoPluginAudioProcessor& owner)
     : AudioProcessorEditor (owner)
+    , processor(owner)
 //    , midiKeyboard (owner.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
 //      timecodeDisplayLabel (String()),
 //      gainLabel (String(), "VBThroughput level:"),
@@ -123,7 +124,7 @@ JuceDemoPluginAudioProcessorEditor::JuceDemoPluginAudioProcessorEditor (JuceDemo
     appProperties->setStorageParameters (options);
     
     formatManager.addDefaultFormats();
-    formatManager.addFormat (new InternalPluginFormat());
+//    formatManager.addFormat (new InternalPluginFormat());
     
     ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
     
@@ -273,3 +274,64 @@ void JuceDemoPluginAudioProcessorEditor::resized()
 //        setName (title);
 //    }
 //}
+
+bool JuceDemoPluginAudioProcessorEditor::isInterestedInFileDrag (const StringArray&)
+{
+    return true;
+}
+
+void JuceDemoPluginAudioProcessorEditor::fileDragEnter (const StringArray&, int, int)
+{
+}
+
+void JuceDemoPluginAudioProcessorEditor::fileDragMove (const StringArray&, int, int)
+{
+}
+
+void JuceDemoPluginAudioProcessorEditor::fileDragExit (const StringArray&)
+{
+}
+
+void JuceDemoPluginAudioProcessorEditor::filesDropped (const StringArray& files, int x, int y)
+{
+//    if (auto* graphEditor = getGraphEditor())
+//    {
+//        if (files.size() == 1 && File (files[0]).hasFileExtension (filenameSuffix))
+//        {
+//            if (auto* filterGraph = graphEditor->graph.get())
+//                if (filterGraph->saveIfNeededAndUserAgrees() == FileBasedDocument::savedOk)
+//                    filterGraph->loadFrom (File (files[0]), true);
+//        }
+//        else
+        {
+            OwnedArray<PluginDescription> typesFound;
+            knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
+            
+            auto pos = getLocalPoint (this, Point<int> (x, y));
+            
+            for (int i = 0; i < jmin (5, typesFound.size()); ++i)
+                if (auto* desc = typesFound.getUnchecked(i))
+                    createPlugin (*desc, pos);
+        }
+//    }
+}
+
+void JuceDemoPluginAudioProcessorEditor::createPlugin (const PluginDescription& desc, Point<int> p)
+{
+    struct AsyncCallback : public AudioPluginFormat::InstantiationCompletionCallback
+    {
+        AsyncCallback (JuceDemoPluginAudioProcessor& g, Point<int> pos)  : owner (g), position (pos)
+        {}
+        
+        void completionCallback (AudioPluginInstance* instance, const String& error) override
+        {
+            owner.addFilterCallback (instance, error, position);
+        }
+        
+        JuceDemoPluginAudioProcessor& owner;
+        Point<int> position;
+    };
+    
+    formatManager.createPluginInstanceAsync (desc, processor.getSampleRate(), processor.getBlockSize(), new AsyncCallback (processor, p));
+}
+

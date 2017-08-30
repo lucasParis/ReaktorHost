@@ -3,6 +3,25 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "juce::AudioPluginFormatManager::getNumFormats():juce_AudioPluginFormatManager.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "formats.size()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "JuceDemoPluginAudioProcessorEditor::filesDropped(juce::StringArray const&amp;, int, int):PluginEditor.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "juce::KnownPluginList::scanAndAddDragAndDroppedFiles(juce::AudioPluginFormatManager&amp;, juce::StringArray const&amp;, juce::OwnedArray&lt;juce::PluginDescription, juce::DummyCriticalSection&gt;&amp;):juce_KnownPluginList.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "formatManager.getNumFormats()">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "FilterGraph::addFilter(juce::PluginDescription const&amp;, juce::Point&lt;double&gt;)::AsyncCallback::completionCallback(juce::AudioPluginInstance*, juce::String const&amp;):FilterGraph.cpp">
          <PersistentStrings>
             <PersistentString

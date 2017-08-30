@@ -160,6 +160,7 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 //==============================================================================
 JuceDemoPluginAudioProcessor::JuceDemoPluginAudioProcessor()
     : AudioProcessor (getBusesProperties())
+    , wrappedInstance(nullptr)
 {
     lastPosInfo.resetToDefault();
 
@@ -191,33 +192,42 @@ JuceDemoPluginAudioProcessor::~JuceDemoPluginAudioProcessor()
 //==============================================================================
 bool JuceDemoPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-    // Only mono/stereo and input/output must have same layout
-    const AudioChannelSet& mainOutput = layouts.getMainOutputChannelSet();
-    const AudioChannelSet& mainInput  = layouts.getMainInputChannelSet();
-
-    // input and output layout must either be the same or the input must be disabled altogether
-    if (! mainInput.isDisabled() && mainInput != mainOutput)
-        return false;
-
-    // do not allow disabling the main buses
-    if (mainOutput.isDisabled())
-        return false;
-
-    // only allow stereo and mono
-    if (mainOutput.size() > 2)
-        return false;
-
-    return true;
+//    if (wrappedInstance != nullptr)
+//    {
+//        return wrappedInstance->isBusesLayoutSupported(layouts);
+//    }
+//    else
+//    {
+    
+        // Only mono/stereo and input/output must have same layout
+        const AudioChannelSet& mainOutput = layouts.getMainOutputChannelSet();
+        const AudioChannelSet& mainInput  = layouts.getMainInputChannelSet();
+        
+        // input and output layout must either be the same or the input must be disabled altogether
+        if (! mainInput.isDisabled() && mainInput != mainOutput)
+            return false;
+        
+        // do not allow disabling the main buses
+        if (mainOutput.isDisabled())
+            return false;
+        
+        // only allow stereo and mono
+        if (mainOutput.size() > 2)
+            return false;
+        
+        return true;
+//    }
 }
 
 AudioProcessor::BusesProperties JuceDemoPluginAudioProcessor::getBusesProperties()
 {
+    
     return BusesProperties().withInput  ("Input",  AudioChannelSet::stereo(), true)
                             .withOutput ("Output", AudioChannelSet::stereo(), true);
 }
 
 //==============================================================================
-void JuceDemoPluginAudioProcessor::prepareToPlay (double newSampleRate, int /*samplesPerBlock*/)
+void JuceDemoPluginAudioProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
 //    // Use this method as the place to do any pre-playback
 //    // initialisation that you need..
@@ -236,6 +246,9 @@ void JuceDemoPluginAudioProcessor::prepareToPlay (double newSampleRate, int /*sa
 //    }
 //
 //    reset();
+    if (wrappedInstance != nullptr)
+        wrappedInstance->prepareToPlay(newSampleRate, samplesPerBlock);
+    
 }
 
 void JuceDemoPluginAudioProcessor::releaseResources()
@@ -243,6 +256,9 @@ void JuceDemoPluginAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 //    keyboardState.reset();
+    
+    if (wrappedInstance != nullptr)
+        wrappedInstance->releaseResources();
 }
 
 void JuceDemoPluginAudioProcessor::reset()
@@ -251,6 +267,9 @@ void JuceDemoPluginAudioProcessor::reset()
 //    // means there's been a break in the audio's continuity.
 //    delayBufferFloat.clear();
 //    delayBufferDouble.clear();
+    
+    if (wrappedInstance != nullptr)
+        wrappedInstance->reset();
 }
 
 template <typename FloatType>
@@ -278,6 +297,9 @@ void JuceDemoPluginAudioProcessor::process (AudioBuffer<FloatType>& buffer, Midi
 //
 //    // Now ask the host for the current time so we can store it to be displayed later...
 //    updateCurrentTimeInfoFromHost();
+    
+    if (wrappedInstance != nullptr)
+        wrappedInstance->processBlock(buffer, midiMessages);
 }
 
 //template <typename FloatType>
@@ -344,6 +366,10 @@ AudioProcessorEditor* JuceDemoPluginAudioProcessor::createEditor()
 //==============================================================================
 void JuceDemoPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
+    if (wrappedInstance != nullptr)
+        wrappedInstance->getStateInformation(destData);
+    else
+    {
     // You should use this method to store your parameters in the memory block.
     // Here's an example of how you can use XML to make it easy and more robust:
 
@@ -361,30 +387,50 @@ void JuceDemoPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
 
     // then use this helper function to stuff it into the binary blob and return it..
     copyXmlToBinary (xml, destData);
+    }
 }
 
 void JuceDemoPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-
-    // This getXmlFromBinary() helper function retrieves our XML from the binary blob..
-    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-
-    if (xmlState != nullptr)
+    if (wrappedInstance != nullptr)
+        wrappedInstance->setStateInformation (data, sizeInBytes);
+    else
     {
-        // make sure that it's actually our type of XML object..
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        // You should use this method to restore your parameters from this memory block,
+        // whose contents will have been created by the getStateInformation() call.
+        
+        // This getXmlFromBinary() helper function retrieves our XML from the binary blob..
+        ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+        
+        if (xmlState != nullptr)
         {
-            // ok, now pull out our last window size..
-            lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
-            lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
-
-            // Now reload our parameters..
-            for (auto* param : getParameters())
-                if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
-                    p->setValue ((float) xmlState->getDoubleAttribute (p->paramID, p->getValue()));
+            // make sure that it's actually our type of XML object..
+            if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+            {
+                // ok, now pull out our last window size..
+                lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
+                lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
+                
+                // Now reload our parameters..
+                for (auto* param : getParameters())
+                    if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
+                        p->setValue ((float) xmlState->getDoubleAttribute (p->paramID, p->getValue()));
+            }
         }
+    }
+}
+
+void JuceDemoPluginAudioProcessor::addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos)
+{
+    if (instance == nullptr)
+    {
+        AlertWindow::showMessageBox (AlertWindow::WarningIcon, TRANS("Couldn't create filter"), error);
+    }
+    else
+    {
+        instance->enableAllBuses();
+        wrappedInstance = nullptr;
+        wrappedInstance = instance;
     }
 }
 

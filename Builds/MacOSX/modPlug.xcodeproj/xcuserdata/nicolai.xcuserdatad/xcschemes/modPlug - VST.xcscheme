@@ -44,7 +44,7 @@
       allowLocationSimulation = "YES">
       <PathRunnable
          runnableDebuggingMode = "0"
-         FilePath = "/Applications/REAPER64.app">
+         FilePath = "/Users/nicolai/Documents/sdks/JUCE-5.1.1/examples/audio plugin host/Builds/MacOSX/build/Debug/Plugin Host.app">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
