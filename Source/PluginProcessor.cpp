@@ -78,6 +78,24 @@ AudioProcessor::BusesProperties ReaktorHostProcessor::getBusesProperties()
                             .withOutput ("Output", AudioChannelSet::stereo(), true);
 }
 
+void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos)
+{
+    if (instance == nullptr)
+    {
+        AlertWindow::showMessageBox (AlertWindow::WarningIcon, TRANS("Couldn't create filter"), error);
+    }
+    else
+    {
+        instance->prepareToPlay(getSampleRate(), getBlockSize());
+        instance->enableAllBuses();
+        
+        wrappedInstance = nullptr;
+        wrappedInstanceEditor = nullptr;
+        wrappedInstance = instance;
+        wrappedInstanceEditor = instance->createEditor();
+    }
+}
+
 //==============================================================================
 void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
@@ -123,8 +141,9 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
 {
     if (wrappedInstance != nullptr)
     {
-//        wrappedInstance->getStateInformation(destData);
         ScopedPointer<XmlElement> wrappedInstanceXml = wrappedInstance->getPluginDescription().createXml();
+        File file("/Users/nicolai/Desktop/file.txt");
+        wrappedInstanceXml->writeToFile(file, "");
         copyXmlToBinary (*wrappedInstanceXml, destData);
     }
     else
@@ -142,76 +161,36 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
         // then use this helper function to stuff it into the binary blob and return it..
         copyXmlToBinary (xml, destData);
     }
-    
-//    XmlElement xml ("MYPLUGINSETTINGS");
-//    
-//    xml.setAttribute ("uiWidth", lastUIWidth);
-//    xml.setAttribute ("uiHeight", lastUIHeight);
-//    
-//    // Store the values of all our parameters, using their param ID as the XML attribute
-//    for (auto* param : getParameters())
-//        if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
-//            xml.setAttribute (p->paramID, p->getValue());
-//    
-//    if (wrappedInstance != nullptr)
-//    {
-//        copyXmlToBinary (*wrappedInstance->getPluginDescription().createXml(), destData);
-//    }
-//    
-//    // then use this helper function to stuff it into the binary blob and return it..
-//    copyXmlToBinary (xml, destData);
 }
 
 void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    if (wrappedInstance != nullptr)
+    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    if (xmlState != nullptr)
     {
-        wrappedInstance->setStateInformation (data, sizeInBytes);
-    }
-    else
-    {
-        // You should use this method to restore your parameters from this memory block,
-        // whose contents will have been created by the getStateInformation() call.
-        
-        // This getXmlFromBinary() helper function retrieves our XML from the binary blob..
-        ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-        
-        if (xmlState != nullptr)
+        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
         {
-            // make sure that it's actually our type of XML object..
-            if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
-            {
-                // ok, now pull out our last window size..
-                lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
-                lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
-                
-                // Now reload our parameters..
-                for (auto* param : getParameters())
-                    if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
-                        p->setValue ((float) xmlState->getDoubleAttribute (p->paramID, p->getValue()));
-            }
-        }
-    }
-    
-    
-//    // This getXmlFromBinary() helper function retrieves our XML from the binary blob..
-//    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-//    
-//    if (xmlState != nullptr)
-//    {
-//        // make sure that it's actually our type of XML object..
-//        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
-//        {
-//            // ok, now pull out our last window size..
-//            lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
-//            lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
-//            
-//            // Now reload our parameters..
+            // ok, now pull out our last window size..
+            lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
+            lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
+            
+            // Now reload our parameters..
 //            for (auto* param : getParameters())
 //                if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
 //                    p->setValue ((float) xmlState->getDoubleAttribute (p->paramID, p->getValue()));
-//        }
-//    }
+        }
+
+        if (xmlState->hasTagName ("PLUGIN"))
+        {
+            PluginDescription desc;
+            desc.loadFromXml(*xmlState);
+            AudioPluginFormatManager formatManager;
+            formatManager.addDefaultFormats();
+            String error;
+            wrappedInstance = formatManager.createPluginInstance (desc, getSampleRate(), getBlockSize(), error);
+            std::cout << error;
+        }
+    }
 }
 
 //==============================================================================

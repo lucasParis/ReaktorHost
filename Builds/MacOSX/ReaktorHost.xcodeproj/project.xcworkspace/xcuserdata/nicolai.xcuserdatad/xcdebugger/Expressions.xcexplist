@@ -10,5 +10,16 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "ReaktorHostProcessor::getStateInformation(juce::MemoryBlock&amp;):PluginProcessor.cpp">
+      </ContextState>
+      <ContextState
+         contextName = "ReaktorHostProcessor::setStateInformation(void const*, int):PluginProcessor.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "error">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>
