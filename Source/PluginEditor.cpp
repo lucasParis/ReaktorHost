@@ -127,5 +127,6 @@ void ReaktorHostProcessorEditor::createPlugin (const PluginDescription& desc, Po
     };
     
     formatManager.createPluginInstanceAsync (desc, processor.getSampleRate(), getProcessor().getBlockSize(), new AsyncCallback (getProcessor(), p));
+    hasEditor = false;
 }
 

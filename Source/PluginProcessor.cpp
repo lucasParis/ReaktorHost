@@ -188,6 +188,7 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
             formatManager.addDefaultFormats();
             String error;
             wrappedInstance = formatManager.createPluginInstance (desc, getSampleRate(), getBlockSize(), error);
+            wrappedInstance->prepareToPlay(44100, getBlockSize());
             std::cout << error;
             wrappedInstanceEditor = wrappedInstance->createEditor();
         }
