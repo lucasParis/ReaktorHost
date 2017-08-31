@@ -32,6 +32,7 @@
 
 ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& owner)
     : AudioProcessorEditor (owner)
+    , hasEditor(false)
 {
     // set resize limits for this plug-in
     setResizeLimits (400, 200, 1600, 800);
@@ -39,47 +40,15 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     // set our component's initial size to be the last one that was stored in the filter's settings
     setSize (owner.lastUIWidth, owner.lastUIHeight);
     
-    // initialise our settings file..
-//    PropertiesFile::Options options;
-//    options.applicationName     = "ModPlug";
-//    options.filenameSuffix      = "settings";
-//    options.osxLibrarySubFolder = "Preferences";
-//    
-//    appProperties = new ApplicationProperties();
-//    appProperties->setStorageParameters (options);
-    
     formatManager.addDefaultFormats();
-//    
-//    ScopedPointer<XmlElement> savedAudioState (appProperties->getUserSettings()->getXmlValue ("audioDeviceState"));
-//    
-//    String error = deviceManager.initialise (256, 256, savedAudioState, true);
-
-//    addAndMakeVisible(graphDocumentComponent = new GraphDocumentComponent (formatManager, deviceManager), false);
-    
-//    restoreWindowStateFromString (getAppProperties().getUserSettings()->getValue ("mainWindowPos"));
-    
-//    InternalPluginFormat internalFormat;
-//    internalFormat.getAllTypes (internalTypes);
-    
-//    ScopedPointer<XmlElement> savedPluginList (getAppProperties().getUserSettings()->getXmlValue ("pluginList"));
-    
-//    if (savedPluginList != nullptr)
-//        knownPluginList.recreateFromXml (*savedPluginList);
-//    
-//    pluginSortMethod = (KnownPluginList::SortMethod) getAppProperties().getUserSettings()->getIntValue ("pluginSortMethod", KnownPluginList::sortByManufacturer);
-//    
-//    knownPluginList.addChangeListener (this);
-    
-//    if (auto* filterGraph = graphDocumentComponent->graph.get())
-//        filterGraph->addChangeListener (this);
     
     startTimerHz (30);
+    
     setVisible (true);
 }
 
 ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 {
-//    graphDocumentComponent = nullptr;
 }
 
 //==============================================================================
@@ -104,14 +73,6 @@ void ReaktorHostProcessorEditor::paint (Graphics& g)
 
 void ReaktorHostProcessorEditor::resized()
 {
-//    Rectangle<int> r (getLocalBounds().reduced (8));
-//    timecodeDisplayLabel.setBounds (r.removeFromTop (26));
-//    midiKeyboard.setBounds (r.removeFromBottom (70));
-//    r.removeFromTop (20);
-//    Rectangle<int> sliderArea (r.removeFromTop (60));
-//    gainSlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth() / 2)));
-//    delaySlider->setBounds (sliderArea.removeFromLeft (jmin (180, sliderArea.getWidth())));
-
     getProcessor().lastUIWidth = getWidth();
     getProcessor().lastUIHeight = getHeight();
 }

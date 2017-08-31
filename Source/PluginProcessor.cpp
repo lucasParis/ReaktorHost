@@ -189,6 +189,7 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
             String error;
             wrappedInstance = formatManager.createPluginInstance (desc, getSampleRate(), getBlockSize(), error);
             std::cout << error;
+            wrappedInstanceEditor = wrappedInstance->createEditor();
         }
     }
 }

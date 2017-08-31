@@ -63,11 +63,5 @@ private:
     AudioPluginFormatManager formatManager;
     KnownPluginList knownPluginList;
     
-    bool hasEditor = false;
-
-//    AudioDeviceManager deviceManager;
-//    OwnedArray<PluginDescription> internalTypes;
-//    ScopedPointer<GraphDocumentComponent> graphDocumentComponent;
-//    ScopedPointer<ApplicationProperties> appProperties;
-
+    bool hasEditor;
 };
