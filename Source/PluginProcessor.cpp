@@ -35,6 +35,7 @@ ReaktorHostProcessor::ReaktorHostProcessor()
     , wrappedInstance(nullptr)
     , wrappedInstanceEditor (nullptr)
 {
+    formatManager.addDefaultFormats();
 }
 
 ReaktorHostProcessor::~ReaktorHostProcessor()
@@ -137,65 +138,157 @@ AudioProcessorEditor* ReaktorHostProcessor::getWrappedInstanceEditor() const
 }
 
 //==============================================================================
-void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
+static XmlElement* createBusLayoutXml (const AudioProcessor::BusesLayout& layout, const bool isInput)
 {
-    if (wrappedInstance != nullptr)
+    const Array<AudioChannelSet>& buses = (isInput ? layout.inputBuses : layout.outputBuses);
+    
+    XmlElement* xml = new XmlElement (isInput ? "INPUTS" : "OUTPUTS");
+    
+    const int n = buses.size();
+    for (int busIdx = 0; busIdx < n; ++busIdx)
     {
-        ScopedPointer<XmlElement> wrappedInstanceXml = wrappedInstance->getPluginDescription().createXml();
-        File file("/Users/nicolai/Desktop/file.txt");
-        wrappedInstanceXml->writeToFile(file, "");
-        copyXmlToBinary (*wrappedInstanceXml, destData);
+        XmlElement* bus = new XmlElement ("BUS");
+        bus->setAttribute ("index", busIdx);
+        
+        const AudioChannelSet& set = buses.getReference (busIdx);
+        const String layoutName = set.isDisabled() ? "disabled" : set.getSpeakerArrangementAsString();
+        
+        bus->setAttribute ("layout", layoutName);
+        
+        xml->addChildElement (bus);
     }
-    else
+    
+    return xml;
+}
+
+static void readBusLayoutFromXml (AudioProcessor::BusesLayout& busesLayout, AudioProcessor* plugin, const XmlElement& xml, const bool isInput)
+{
+    Array<AudioChannelSet>& targetBuses = (isInput ? busesLayout.inputBuses : busesLayout.outputBuses);
+    int maxNumBuses = 0;
+    
+    if (auto* buses = xml.getChildByName (isInput ? "INPUTS" : "OUTPUTS"))
     {
-        XmlElement xml ("MYPLUGINSETTINGS");
+        forEachXmlChildElementWithTagName (*buses, e, "BUS")
+        {
+            const int busIdx = e->getIntAttribute ("index");
+            maxNumBuses = jmax (maxNumBuses, busIdx + 1);
+            
+            // the number of buses on busesLayout may not be in sync with the plugin after adding buses
+            // because adding an input bus could also add an output bus
+            for (int actualIdx = plugin->getBusCount (isInput) - 1; actualIdx < busIdx; ++actualIdx)
+                if (! plugin->addBus (isInput)) return;
+            
+            for (int actualIdx = targetBuses.size() - 1; actualIdx < busIdx; ++actualIdx)
+                targetBuses.add (plugin->getChannelLayoutOfBus (isInput, busIdx));
+            
+            const String& layout = e->getStringAttribute("layout");
+            
+            if (layout.isNotEmpty())
+                targetBuses.getReference (busIdx) = AudioChannelSet::fromAbbreviatedString (layout);
+        }
+    }
+    
+    // if the plugin has more buses than specified in the xml, then try to remove them!
+    while (maxNumBuses < targetBuses.size())
+    {
+        if (! plugin->removeBus (isInput))
+            return;
         
-        xml.setAttribute ("uiWidth", lastUIWidth);
-        xml.setAttribute ("uiHeight", lastUIHeight);
-        
-        // Store the values of all our parameters, using their param ID as the XML attribute
-        for (auto* param : getParameters())
-            if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
-                xml.setAttribute (p->paramID, p->getValue());
-        
-        // then use this helper function to stuff it into the binary blob and return it..
-        copyXmlToBinary (xml, destData);
+        targetBuses.removeLast();
     }
 }
+
+void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
+{
+    XmlElement mainXmlElement ("REAKTOR_HOST_SETTINGS");
+    
+    mainXmlElement.setAttribute ("uiWidth", lastUIWidth);
+    mainXmlElement.setAttribute ("uiHeight", lastUIHeight);
+    
+    if (wrappedInstance != nullptr){
+        XmlElement* wrappedInstanceXmlElement = new XmlElement ("WRAPPED_INSTANCE");
+        
+        PluginDescription pd;
+        wrappedInstance->fillInPluginDescription (pd);
+        wrappedInstanceXmlElement->addChildElement (pd.createXml());
+        
+        XmlElement* state = new XmlElement ("WRAPPED_INSTANCE_STATE");
+        
+        MemoryBlock m;
+        wrappedInstance->getStateInformation (m);
+        state->addTextElement (m.toBase64Encoding());
+        wrappedInstanceXmlElement->addChildElement (state);
+
+        XmlElement* layouts = new XmlElement ("WRAPPED_INSTANCE_LAYOUT");
+        const AudioProcessor::BusesLayout layout = wrappedInstance->getBusesLayout();
+        
+        const bool isInputChoices[] = { true, false };
+        for (bool isInput : isInputChoices)
+            layouts->addChildElement (createBusLayoutXml (layout, isInput));
+        
+        wrappedInstanceXmlElement->addChildElement (layouts);
+        
+        mainXmlElement.addChildElement(wrappedInstanceXmlElement);
+    }
+    copyXmlToBinary (mainXmlElement, destData);
+}
+
 
 void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    ScopedPointer<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-    if (xmlState != nullptr)
+    ScopedPointer<XmlElement> mainXmlElement (getXmlFromBinary (data, sizeInBytes));
+    File file ("/Users/nicolai/Desktop/file.txt");
+    mainXmlElement->writeToFile(file, "");
+    
+    if (mainXmlElement != nullptr)
     {
-        if (xmlState->hasTagName ("MYPLUGINSETTINGS"))
+        if (mainXmlElement->hasTagName ("REAKTOR_HOST_SETTINGS"))
         {
-            // ok, now pull out our last window size..
-            lastUIWidth  = jmax (xmlState->getIntAttribute ("uiWidth", lastUIWidth), 400);
-            lastUIHeight = jmax (xmlState->getIntAttribute ("uiHeight", lastUIHeight), 200);
-            
-            // Now reload our parameters..
-//            for (auto* param : getParameters())
-//                if (auto* p = dynamic_cast<AudioProcessorParameterWithID*> (param))
-//                    p->setValue ((float) xmlState->getDoubleAttribute (p->paramID, p->getValue()));
+            lastUIWidth  = jmax (mainXmlElement->getIntAttribute ("uiWidth", lastUIWidth), 400);
+            lastUIHeight = jmax (mainXmlElement->getIntAttribute ("uiHeight", lastUIHeight), 200);
         }
-
-        if (xmlState->hasTagName ("PLUGIN"))
+        
+        forEachXmlChildElementWithTagName (*mainXmlElement, wrappedInstanceXmlElement, "WRAPPED_INSTANCE")
         {
-            PluginDescription desc;
-            desc.loadFromXml(*xmlState);
-            AudioPluginFormatManager formatManager;
-            formatManager.addDefaultFormats();
-            String error;
-            wrappedInstance = formatManager.createPluginInstance (desc, getSampleRate(), getBlockSize(), error);
-            wrappedInstance->prepareToPlay(44100, getBlockSize());
-            std::cout << error;
-            wrappedInstanceEditor = wrappedInstance->createEditor();
+            PluginDescription pd;
+            forEachXmlChildElement (*wrappedInstanceXmlElement, e)
+            {
+                if (pd.loadFromXml (*e))
+                    break;
+            }
+            
+            String errorMessage;
+            wrappedInstance = formatManager.createPluginInstance (pd, getSampleRate(), getBlockSize(), errorMessage);
+            
+            if (wrappedInstance == nullptr)
+                return;
+            
+            if (const XmlElement* const layoutEntity = wrappedInstanceXmlElement->getChildByName ("WRAPPED_INSTANCE_LAYOUT"))
+            {
+                AudioProcessor::BusesLayout layout = wrappedInstance->getBusesLayout();
+                
+                const bool isInputChoices[] = { true, false };
+                for (bool isInput : isInputChoices)
+                    readBusLayoutFromXml (layout, wrappedInstance, *layoutEntity, isInput);
+                
+                wrappedInstance->setBusesLayout (layout);
+            }
+            
+            if (const XmlElement* const state = wrappedInstanceXmlElement->getChildByName ("WRAPPED_INSTANCE_STATE"))
+            {
+                MemoryBlock m;
+                m.fromBase64Encoding (state->getAllSubText());
+                wrappedInstance->setStateInformation (m.getData(), (int) m.getSize());
+                wrappedInstance->prepareToPlay(44100, getBlockSize());
+                wrappedInstanceEditor = wrappedInstance->createEditor();
+                return;
+            }
         }
     }
 }
-
 //==============================================================================
+
+
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
