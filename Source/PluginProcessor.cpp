@@ -235,20 +235,18 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
 
 void ReaktorHostProcessor::loadFxpFile(String fileName)
 {
-#if JUCE_PLUGINHOST_VST
-    String folder = "/Users/nicolai/Desktop/FXP";
-    File f (folder + fileName + ".fxp");
+    File f (FXP_FOLDER_PATH + fileName + ".fxp");
     if (f.exists())
     {
         MemoryBlock mb;
         f.loadFileAsData (mb);
+#if JUCE_PLUGINHOST_VST
         VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
-    }
 //#elif JUCE_PLUGINHOST_AU
-//    AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+        //AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
 #endif
+    }
 }
-
 
 void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {

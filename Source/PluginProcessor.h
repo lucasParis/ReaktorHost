@@ -23,26 +23,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-//#if JucePlugin_Build_VST
-//    #undef JUCE_PLUGINHOST_VST
-//    #define JUCE_PLUGINHOST_VST = 1
-//#endif
-
-//#if JucePlugin_Build_AU
-//    #undef JUCE_PLUGINHOST_AU
-//    #define JUCE_PLUGINHOST_AU = 1
-//    static bool wtf = true;
-//#else
-//    static bool wtf = false;
-//#endif
-
-//#if JucePlugin_Build_VST
-//    #undef JUCE_PLUGINHOST_AU
-//#endif
-
-#ifndef FILE_PATH
-    #define FILE_PATH "/Users/nicolai/Desktop/Untitled.fxp"
-#endif
+static String FXP_FOLDER_PATH = "/Users/nicolai/Desktop/FXP/";
 
 class ReaktorHostProcessor  : public AudioProcessor
 {
