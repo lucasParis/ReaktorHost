@@ -45,6 +45,9 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     // set our component's initial size to be the last one that was stored in the filter's settings
     setSize (owner.lastUIWidth, owner.lastUIHeight);
     
+    //set button position and size
+    openButton->setBounds(0, 0, owner.lastUIWidth, 20);
+    
     formatManager.addDefaultFormats();
     
     startTimerHz (30);
@@ -121,7 +124,7 @@ void ReaktorHostProcessorEditor::filesDropped (const StringArray& files, int x, 
     //not handling replacing wrapped instance for now
     if (hasEditor)
         return;
-    
+        
     OwnedArray<PluginDescription> typesFound;
     knownPluginList.scanAndAddDragAndDroppedFiles (formatManager, files, typesFound);
     

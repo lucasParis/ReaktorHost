@@ -34,6 +34,7 @@ ReaktorHostProcessor::ReaktorHostProcessor()
     : AudioProcessor (getBusesProperties())
     , wrappedInstance(nullptr)
     , wrappedInstanceEditor (nullptr)
+    , isWrappedInstanceReadyToPlay(false)
 {
     formatManager.addDefaultFormats();
 }
@@ -94,6 +95,7 @@ void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, con
         wrappedInstanceEditor = nullptr;
         wrappedInstance = instance;
         wrappedInstanceEditor = instance->createEditor();
+        isWrappedInstanceReadyToPlay = true;
     }
 }
 
@@ -101,7 +103,10 @@ void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, con
 void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
     if (wrappedInstance != nullptr)
+    {
         wrappedInstance->prepareToPlay(newSampleRate, samplesPerBlock);
+        isWrappedInstanceReadyToPlay = true;
+    }
 }
 
 void ReaktorHostProcessor::releaseResources()
@@ -119,7 +124,7 @@ void ReaktorHostProcessor::reset()
 template <typename FloatType>
 void ReaktorHostProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages)
 {
-    if (wrappedInstance != nullptr)
+    if (wrappedInstance != nullptr && isWrappedInstanceReadyToPlay)
     {
         wrappedInstance->setPlayHead(getPlayHead());
         wrappedInstance->processBlock(buffer, midiMessages);
@@ -235,19 +240,21 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
 
 void ReaktorHostProcessor::openFxpFile()
 {
+#if JUCE_PLUGINHOST_VST
     File f ("/Users/nicolai/Desktop/Untitled.fxp");
     MemoryBlock mb;
     f.loadFileAsData (mb);
     VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+    
+//#elif JUCE_PLUGINHOST_AU
+//    AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+#endif
 }
 
 
 void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     ScopedPointer<XmlElement> mainXmlElement (getXmlFromBinary (data, sizeInBytes));
-    File file ("/Users/nicolai/Desktop/file.txt");
-    mainXmlElement->writeToFile(file, "");
-    
     if (mainXmlElement != nullptr)
     {
         if (mainXmlElement->hasTagName ("REAKTOR_HOST_SETTINGS"))
@@ -289,7 +296,7 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
                 wrappedInstance->setStateInformation (m.getData(), (int) m.getSize());
                 wrappedInstance->prepareToPlay(44100, getBlockSize());
                 wrappedInstanceEditor = wrappedInstance->createEditor();
-                
+                isWrappedInstanceReadyToPlay = true;
                 return;
             }
         }

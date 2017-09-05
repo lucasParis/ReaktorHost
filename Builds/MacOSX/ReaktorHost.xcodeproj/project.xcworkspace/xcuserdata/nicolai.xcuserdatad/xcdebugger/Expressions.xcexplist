@@ -3,6 +3,22 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "ReaktorHostProcessor::setStateInformation(void const*, int):PluginProcessor.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "error">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ReaktorHostProcessorEditor::ReaktorHostProcessorEditor(ReaktorHostProcessor&amp;):PluginEditor.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "owner.lastUIWidth">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "juce::ReferenceCountedObjectPtr&lt;juce::WeakReference&lt;juce::Component, juce::ReferenceCountedObject&gt;::SharedPointer&gt;::operator juce::WeakReference&lt;juce::Component, juce::ReferenceCountedObject&gt;::SharedPointer*() const:juce_ReferenceCountedObject.h">
          <PersistentStrings>
             <PersistentString
@@ -14,10 +30,13 @@
          contextName = "ReaktorHostProcessor::getStateInformation(juce::MemoryBlock&amp;):PluginProcessor.cpp">
       </ContextState>
       <ContextState
-         contextName = "ReaktorHostProcessor::setStateInformation(void const*, int):PluginProcessor.cpp">
+         contextName = "ReaktorHostProcessorEditor::filesDropped(juce::StringArray const&amp;, int, int):PluginEditor.cpp">
          <PersistentStrings>
             <PersistentString
-               value = "error">
+               value = "JUCE_PLUGINHOST_AU">
+            </PersistentString>
+            <PersistentString
+               value = "JucePlugin_Build_AU">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

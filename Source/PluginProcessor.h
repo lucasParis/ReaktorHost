@@ -28,10 +28,22 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-#if (!JucePlugin_Build_VST) 
-    #define JUCE_PLUGINHOST_AU=1
-#endif
+//#if JucePlugin_Build_VST
+//    #undef JUCE_PLUGINHOST_VST
+//    #define JUCE_PLUGINHOST_VST = 1
+//#endif
 
+//#if JucePlugin_Build_AU
+//    #undef JUCE_PLUGINHOST_AU
+//    #define JUCE_PLUGINHOST_AU = 1
+//    static bool wtf = true;
+//#else
+//    static bool wtf = false;
+//#endif
+
+//#if JucePlugin_Build_VST
+//    #undef JUCE_PLUGINHOST_AU
+//#endif
 
 class ReaktorHostProcessor  : public AudioProcessor
 {
@@ -93,6 +105,8 @@ private:
     template <typename FloatType>
     void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages);
     static BusesProperties getBusesProperties();
+    
+    bool isWrappedInstanceReadyToPlay;
     
     ScopedPointer<AudioPluginInstance> wrappedInstance;
     ScopedPointer<AudioProcessorEditor> wrappedInstanceEditor;
