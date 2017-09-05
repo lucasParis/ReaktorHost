@@ -233,6 +233,14 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
     copyXmlToBinary (mainXmlElement, destData);
 }
 
+void ReaktorHostProcessor::openFxpFile()
+{
+    File f ("/Users/nicolai/Desktop/Untitled.fxp");
+    MemoryBlock mb;
+    f.loadFileAsData (mb);
+    VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+}
+
 
 void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
@@ -281,6 +289,7 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
                 wrappedInstance->setStateInformation (m.getData(), (int) m.getSize());
                 wrappedInstance->prepareToPlay(44100, getBlockSize());
                 wrappedInstanceEditor = wrappedInstance->createEditor();
+                
                 return;
             }
         }

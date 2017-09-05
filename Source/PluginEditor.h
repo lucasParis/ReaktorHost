@@ -35,12 +35,14 @@
 class ReaktorHostProcessorEditor : public AudioProcessorEditor
                                  , private Timer
                                  , public FileDragAndDropTarget
+                                 , private Button::Listener
 {
 public:
     ReaktorHostProcessorEditor (ReaktorHostProcessor&);
     ~ReaktorHostProcessorEditor();
 
-    //==============================================================================
+    void buttonClicked (Button* b) override;
+    
     void paint (Graphics&) override;
     void resized() override;
     void timerCallback() override;
@@ -62,6 +64,9 @@ private:
 
     AudioPluginFormatManager formatManager;
     KnownPluginList knownPluginList;
+    
+    ScopedPointer<TextButton> openButton;
+    ScopedPointer<Component> wrappedEditorComponent;
     
     bool hasEditor;
 };

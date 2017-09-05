@@ -34,6 +34,11 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     : AudioProcessorEditor (owner)
     , hasEditor(false)
 {
+    
+    addAndMakeVisible (openButton = new TextButton("open .fxp"));
+    openButton->addListener(this);
+    addAndMakeVisible(wrappedEditorComponent = new Component());
+    
     // set resize limits for this plug-in
     setResizeLimits (400, 200, 1600, 800);
 
@@ -52,14 +57,31 @@ ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 }
 
 //==============================================================================
+void ReaktorHostProcessorEditor::buttonClicked (Button* b)
+{
+    if (b == openButton)
+        getProcessor().openFxpFile();
+}
+
 //==============================================================================
 void ReaktorHostProcessorEditor::timerCallback()
 {
     if (!hasEditor)
         if (AudioProcessorEditor* instanceEditor = getProcessor().getWrappedInstanceEditor())
         {
-            addAndMakeVisible(instanceEditor);
-            setBounds(instanceEditor->getBounds());
+            Rectangle<int> wrappedInstanceEditorBounds (instanceEditor->getBounds());
+            
+            //set button position and size
+            int buttonWidth = wrappedInstanceEditorBounds.getWidth();
+            int buttonHeight = 20;
+            openButton->setBounds(0, 0, buttonWidth, buttonHeight);
+
+            //show wrapped instance editor in its full size
+            wrappedEditorComponent->addAndMakeVisible(instanceEditor);
+            wrappedEditorComponent->setBounds(0, buttonHeight, wrappedInstanceEditorBounds.getWidth(), wrappedInstanceEditorBounds.getHeight());
+            
+            //set whole size (potentially not necessary)
+            setSize(buttonWidth, buttonHeight + wrappedInstanceEditorBounds.getHeight());
             hasEditor = true;
         }
 }
