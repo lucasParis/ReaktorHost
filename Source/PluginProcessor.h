@@ -57,7 +57,7 @@ public:
     void releaseResources() override;
     void reset() override;
     
-    void openFxpFile();
+    void loadFxpFile(String fileName);
 
     //==============================================================================
     void processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages) override
@@ -105,11 +105,11 @@ private:
     void process (AudioBuffer<FloatType>& buffer, MidiBuffer& midiMessages);
     static BusesProperties getBusesProperties();
     
-    bool isWrappedInstanceReadyToPlay;
-    
     ScopedPointer<AudioPluginInstance> wrappedInstance;
     ScopedPointer<AudioProcessorEditor> wrappedInstanceEditor;
     AudioPluginFormatManager formatManager;
+    
+    bool isWrappedInstanceReadyToPlay;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };

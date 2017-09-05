@@ -26,27 +26,43 @@
 
 
 ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& owner)
-    : AudioProcessorEditor (owner)
-    , hasEditor(false)
+: AudioProcessorEditor (owner)
+, hasEditor(false)
+, oscPort(1234)
 {
-    
-    addAndMakeVisible (openButton = new TextButton("open .fxp"));
-    openButton->addListener(this);
-    addAndMakeVisible(wrappedEditorComponent = new Component());
-    
-    // set resize limits for this plug-in
-    setResizeLimits (400, 200, 3200, 1600);
-
-    // set our component's initial size to be the last one that was stored in the filter's settings
-    setSize (owner.lastUIWidth, owner.lastUIHeight);
-    
-    //set button position and size
-    openButton->setBounds(0, 0, owner.lastUIWidth, 20);
-    
+    //make sure we can open the default plugin file types
     formatManager.addDefaultFormats();
     
-    startTimerHz (30);
+    //OSC STUFF
+    // specify here on which UDP port number to receive incoming OSC messages
+    if (! connect (oscPort))
+    {
+        showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
+    }
+    // tell the component to listen for OSC messages matching this address:
+    addListener (this, "/load"); ///load patchnumero1
+
+
+    //open button
+    addAndMakeVisible (openButton = new TextButton("open .fxp"));
+    openButton->addListener(this);
+    openButton->setBounds(0, 0, owner.lastUIWidth/2, 20);
     
+    //osc text editor
+    addAndMakeVisible (oscPortEditor = new TextEditor());
+    oscPortEditor->setText(String(oscPort));
+    oscPortEditor->addListener(this);
+    oscPortEditor->setBounds(owner.lastUIWidth/2, 0, owner.lastUIWidth/2, 20);
+    
+    //wrapped instance component
+    addAndMakeVisible(wrappedEditorComponent = new Component());
+    
+    //size and size limits for whole thing
+    setResizeLimits (400, 200, 3200, 1600);
+    setSize (owner.lastUIWidth, owner.lastUIHeight);
+    
+    //start timer and make ourselves visible
+    startTimerHz (30);
     setVisible (true);
 }
 
@@ -58,7 +74,20 @@ ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 void ReaktorHostProcessorEditor::buttonClicked (Button* b)
 {
     if (b == openButton)
-        getProcessor().openFxpFile();
+        getProcessor().loadFxpFile("Untitled1");
+}
+
+void ReaktorHostProcessorEditor::textEditorReturnKeyPressed(TextEditor& textEditor)
+{
+    if (&textEditor == oscPortEditor)
+    {
+        oscPort = textEditor.getText().getIntValue();
+        if (! connect (oscPort))
+        {
+            showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
+        }
+    }
+
 }
 
 //==============================================================================
@@ -70,16 +99,18 @@ void ReaktorHostProcessorEditor::timerCallback()
             Rectangle<int> wrappedInstanceEditorBounds (instanceEditor->getBounds());
             
             //set button position and size
-            int buttonWidth = wrappedInstanceEditorBounds.getWidth();
+            int width = wrappedInstanceEditorBounds.getWidth();
             int buttonHeight = 20;
-            openButton->setBounds(0, 0, buttonWidth, buttonHeight);
+            openButton->setBounds(0, 0, width/2, buttonHeight);
+            
+            oscPortEditor->setBounds(width/2, 0, width/2, buttonHeight);
 
             //show wrapped instance editor in its full size
             wrappedEditorComponent->addAndMakeVisible(instanceEditor);
             wrappedEditorComponent->setBounds(0, buttonHeight, wrappedInstanceEditorBounds.getWidth(), wrappedInstanceEditorBounds.getHeight());
             
             //set whole size (potentially not necessary)
-            setSize(buttonWidth, buttonHeight + wrappedInstanceEditorBounds.getHeight());
+            setSize(width, buttonHeight + wrappedInstanceEditorBounds.getHeight());
             hasEditor = true;
         }
 }
@@ -93,10 +124,12 @@ void ReaktorHostProcessorEditor::paint (Graphics& g)
 
 void ReaktorHostProcessorEditor::resized()
 {
-    getProcessor().lastUIWidth = getWidth();
+    int width = getWidth();
+    getProcessor().lastUIWidth = width;
     getProcessor().lastUIHeight = getHeight();
     
-    openButton->setBounds(0, 0, getProcessor().lastUIWidth, 20);
+    openButton->setBounds(0, 0, width/2, 20);
+    oscPortEditor->setBounds(width/2, 0, width/2, 20);
 }
 
 bool ReaktorHostProcessorEditor::isInterestedInFileDrag (const StringArray&)
@@ -150,5 +183,22 @@ void ReaktorHostProcessorEditor::createPlugin (const PluginDescription& desc, Po
     
     formatManager.createPluginInstanceAsync (desc, processor.getSampleRate(), getProcessor().getBlockSize(), new AsyncCallback (getProcessor(), p));
     hasEditor = false;
+}
+
+void ReaktorHostProcessorEditor::oscMessageReceived (const OSCMessage& message)
+{
+    if (message.getAddressPattern().matches("/load"))
+        if (message.size() == 1 && message[0].isString())
+            getProcessor().loadFxpFile(message[0].getString());
+            
+}
+
+void ReaktorHostProcessorEditor::showConnectionErrorMessage (const String& messageText)
+{
+    AlertWindow::showMessageBoxAsync (
+                                      AlertWindow::WarningIcon,
+                                      "Connection error",
+                                      messageText,
+                                      "OK");
 }
 

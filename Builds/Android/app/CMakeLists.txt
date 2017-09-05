@@ -13,6 +13,7 @@ add_definitions("-DJUCE_ANDROID=1" "-DJUCE_ANDROID_API_VERSION=23" "-DJUCE_ANDRO
 include_directories( AFTER
     "../../../JuceLibraryCode"
     "../../../../../modules"
+    "../../../../../sdks/JUCE-5.1.1/modules"
     "${ANDROID_NDK}/sources/android/cpufeatures"
 )
 
@@ -1250,6 +1251,24 @@ add_library( ${BINARY_NAME}
     "../../../../../modules/juce_gui_extra/juce_gui_extra.cpp"
     "../../../../../modules/juce_gui_extra/juce_gui_extra.mm"
     "../../../../../sdks/JUCE-5.1.1/modules/juce_gui_extra/juce_gui_extra.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCAddress.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCAddress.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCArgument.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCArgument.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCBundle.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCBundle.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCMessage.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCMessage.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCReceiver.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCReceiver.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCSender.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCSender.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTimeTag.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTimeTag.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTypes.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTypes.h"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/juce_osc.cpp"
+    "../../../../../sdks/JUCE-5.1.1/modules/juce_osc/juce_osc.h"
     "../../../JuceLibraryCode/AppConfig.h"
     "../../../JuceLibraryCode/include_juce_audio_basics.cpp"
     "../../../JuceLibraryCode/include_juce_audio_devices.cpp"
@@ -1263,6 +1282,7 @@ add_library( ${BINARY_NAME}
     "../../../JuceLibraryCode/include_juce_graphics.cpp"
     "../../../JuceLibraryCode/include_juce_gui_basics.cpp"
     "../../../JuceLibraryCode/include_juce_gui_extra.cpp"
+    "../../../JuceLibraryCode/include_juce_osc.cpp"
     "../../../JuceLibraryCode/JuceHeader.h"
 )
 
@@ -2486,6 +2506,24 @@ set_source_files_properties("../../../../../modules/juce_gui_extra/native/juce_w
 set_source_files_properties("../../../../../modules/juce_gui_extra/juce_gui_extra.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("../../../../../modules/juce_gui_extra/juce_gui_extra.mm" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_gui_extra/juce_gui_extra.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCAddress.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCAddress.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCArgument.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCArgument.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCBundle.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCBundle.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCMessage.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCMessage.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCReceiver.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCReceiver.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCSender.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCSender.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTimeTag.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTimeTag.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTypes.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/osc/juce_OSCTypes.h" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/juce_osc.cpp" PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties("../../../../../sdks/JUCE-5.1.1/modules/juce_osc/juce_osc.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("../../../JuceLibraryCode/AppConfig.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 set_source_files_properties("../../../JuceLibraryCode/JuceHeader.h" PROPERTIES HEADER_FILE_ONLY TRUE)
 

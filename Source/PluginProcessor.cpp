@@ -233,14 +233,17 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
     copyXmlToBinary (mainXmlElement, destData);
 }
 
-void ReaktorHostProcessor::openFxpFile()
+void ReaktorHostProcessor::loadFxpFile(String fileName)
 {
 #if JUCE_PLUGINHOST_VST
-    File f (FILE_PATH);
-    MemoryBlock mb;
-    f.loadFileAsData (mb);
-    VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
-    
+    String folder = "/Users/nicolai/Desktop/FXP";
+    File f (folder + fileName + ".fxp");
+    if (f.exists())
+    {
+        MemoryBlock mb;
+        f.loadFileAsData (mb);
+        VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+    }
 //#elif JUCE_PLUGINHOST_AU
 //    AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
 #endif

@@ -37,6 +37,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../sdks/JUCE-5.1.1/modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../sdks/JUCE-5.1.1/modules"/>
         <MODULEPATH id="juce_audio_formats" path="../../sdks/JUCE-5.1.1/modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
     <VS2015 targetFolder="Builds/VisualStudio2015" vstFolder="" vst3Folder="">
@@ -59,6 +60,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../modules"/>
         <MODULEPATH id="juce_audio_formats" path="../../modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </VS2015>
     <VS2017 targetFolder="Builds/VisualStudio2017">
@@ -81,6 +83,7 @@
         <MODULEPATH id="juce_audio_formats" path="../../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </VS2017>
     <LINUX_MAKE targetFolder="Builds/LinuxMakefile" vstFolder="" rtasFolder="~/SDKs/PT_80_SDK"
@@ -104,6 +107,7 @@
         <MODULEPATH id="juce_audio_utils" path="../../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../modules"/>
         <MODULEPATH id="juce_audio_formats" path="../../modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </LINUX_MAKE>
     <XCODE_IPHONE targetFolder="Builds/iOS" iosScreenOrientation="landscape" iosBackgroundAudio="1"
@@ -125,6 +129,7 @@
         <MODULEPATH id="juce_audio_formats" path="../../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </XCODE_IPHONE>
     <ANDROIDSTUDIO targetFolder="Builds/Android" androidSDKPath="" androidNDKPath=""
@@ -149,6 +154,7 @@
         <MODULEPATH id="juce_audio_formats" path="../../modules"/>
         <MODULEPATH id="juce_audio_devices" path="../../modules"/>
         <MODULEPATH id="juce_audio_basics" path="../../modules"/>
+        <MODULEPATH id="juce_osc" path="../../sdks/JUCE-5.1.1/modules"/>
       </MODULEPATHS>
     </ANDROIDSTUDIO>
   </EXPORTFORMATS>
@@ -176,5 +182,6 @@
     <MODULE id="juce_graphics" showAllCode="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_osc" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
 </JUCERPROJECT>
