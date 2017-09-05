@@ -1,25 +1,20 @@
 /*
   ==============================================================================
 
-   This file is part of the JUCE library.
-   Copyright (c) 2017 - ROLI Ltd.
-
-   JUCE is an open source library subject to commercial or open-source
-   licensing.
-
-   By using JUCE, you agree to the terms of both the JUCE 5 End-User License
-   Agreement and JUCE 5 Privacy Policy (both updated and effective as of the
-   27th April 2017).
-
-   End User License Agreement: www.juce.com/juce-5-licence
-   Privacy Policy: www.juce.com/juce-5-privacy-policy
-
-   Or: You may also use this code under the terms of the GPL v3 (see
-   www.gnu.org/licenses).
-
-   JUCE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY, AND ALL WARRANTIES, WHETHER
-   EXPRESSED OR IMPLIED, INCLUDING MERCHANTABILITY AND FITNESS FOR PURPOSE, ARE
-   DISCLAIMED.
+ Copyright (C) 2017  Lucas Paris
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
   ==============================================================================
 */
@@ -40,7 +35,7 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     addAndMakeVisible(wrappedEditorComponent = new Component());
     
     // set resize limits for this plug-in
-    setResizeLimits (400, 200, 1600, 800);
+    setResizeLimits (400, 200, 3200, 1600);
 
     // set our component's initial size to be the last one that was stored in the filter's settings
     setSize (owner.lastUIWidth, owner.lastUIHeight);
@@ -100,6 +95,8 @@ void ReaktorHostProcessorEditor::resized()
 {
     getProcessor().lastUIWidth = getWidth();
     getProcessor().lastUIHeight = getHeight();
+    
+    openButton->setBounds(0, 0, getProcessor().lastUIWidth, 20);
 }
 
 bool ReaktorHostProcessorEditor::isInterestedInFileDrag (const StringArray&)
