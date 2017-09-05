@@ -28,6 +28,11 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
+#if (!JucePlugin_Build_VST) 
+    #define JUCE_PLUGINHOST_AU=1
+#endif
+
+
 class ReaktorHostProcessor  : public AudioProcessor
 {
 public:

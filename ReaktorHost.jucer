@@ -14,13 +14,13 @@
               companyWebsite="" companyEmail="" pluginIsMidiEffectPlugin="0"
               buildAUv3="0" buildStandalone="0" enableIAA="0" displaySplashScreen="1"
               reportAppUsage="1" splashScreenColour="Dark" cppLanguageStandard="11"
-              defines="JUCE_PLUGINHOST_VST=1&#10;JUCE_PLUGINHOST_AU=1" userNotes="">
+              defines="JUCE_PLUGINHOST_VST=1" userNotes="">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" vstFolder="" rtasFolder="~/SDKs/PT_80_SDK"
                objCExtraSuffix="JuceDemo" aaxFolder="" postbuildCommand="" vst3Folder="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="ReaktorHost"
-                       osxSDK="default" osxCompatibility="default" osxArchitecture="64BitUniversal"/>
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="Native"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="ReaktorHost"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="64BitUniversal"/>
       </CONFIGURATIONS>
