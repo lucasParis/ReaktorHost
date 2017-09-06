@@ -249,3 +249,4 @@
 ## UNKNOWN: recommended by others, but I can't discover what these files are
 ##
 .DS_Store
+Builds/MacOSX/ReaktorHost.xcodeproj/project.xcworkspace/xcuserdata/nicolai.xcuserdatad/UserInterfaceState.xcuserstate
