@@ -70,6 +70,12 @@ public:
     void setCurrentProgram (int /*index*/) override                             {}
     const String getProgramName (int /*index*/) override                        { return String(); }
     void changeProgramName (int /*index*/, const String& /*name*/) override     {}
+    
+    int getOscPort()            {return oscPort;}
+    void setOscPort(int port)   {oscPort = port;}
+    
+    int getInstanceNumber()             {return instanceNumber;}
+    void setInstanceNumber(int number)  {instanceNumber = number;}
 
     //==============================================================================
     void getStateInformation (MemoryBlock&) override;
@@ -91,6 +97,7 @@ private:
     AudioPluginFormatManager formatManager;
     
     bool isWrappedInstanceReadyToPlay;
+    int oscPort, instanceNumber;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };

@@ -28,13 +28,13 @@
 ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& owner)
 : AudioProcessorEditor (owner)
 , hasEditor(false)
-, oscPort(1234)
 {
     //make sure we can open the default plugin file types
     formatManager.addDefaultFormats();
     
     //OSC STUFF
     // specify here on which UDP port number to receive incoming OSC messages
+    int oscPort = owner.getOscPort();
     if (! connect (oscPort))
     {
         showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
@@ -81,7 +81,8 @@ void ReaktorHostProcessorEditor::textEditorReturnKeyPressed(TextEditor& textEdit
 {
     if (&textEditor == oscPortEditor)
     {
-        oscPort = textEditor.getText().getIntValue();
+        int oscPort = textEditor.getText().getIntValue();
+        getProcessor().setOscPort(oscPort);
         if (! connect (oscPort))
         {
             showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));

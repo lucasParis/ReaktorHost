@@ -74,5 +74,4 @@ private:
     void showConnectionErrorMessage (const String& messageText);
     
     bool hasEditor;
-    int oscPort;
 };

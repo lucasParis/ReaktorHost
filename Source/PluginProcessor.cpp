@@ -26,10 +26,12 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter();
 
 
 ReaktorHostProcessor::ReaktorHostProcessor()
-    : AudioProcessor (getBusesProperties())
-    , wrappedInstance(nullptr)
-    , wrappedInstanceEditor (nullptr)
-    , isWrappedInstanceReadyToPlay(false)
+: AudioProcessor (getBusesProperties())
+, wrappedInstance(nullptr)
+, wrappedInstanceEditor (nullptr)
+, isWrappedInstanceReadyToPlay(false)
+, oscPort(1234)
+, instanceNumber(1)
 {
     formatManager.addDefaultFormats();
 }
@@ -204,6 +206,8 @@ void ReaktorHostProcessor::getStateInformation (MemoryBlock& destData)
     
     mainXmlElement.setAttribute ("uiWidth", lastUIWidth);
     mainXmlElement.setAttribute ("uiHeight", lastUIHeight);
+    mainXmlElement.setAttribute ("oscPort", oscPort);
+    mainXmlElement.setAttribute ("instanceNumber", instanceNumber);
     
     if (wrappedInstance != nullptr){
         XmlElement* wrappedInstanceXmlElement = new XmlElement ("WRAPPED_INSTANCE");
@@ -255,8 +259,10 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
     {
         if (mainXmlElement->hasTagName ("REAKTOR_HOST_SETTINGS"))
         {
-            lastUIWidth  = jmax (mainXmlElement->getIntAttribute ("uiWidth", lastUIWidth), 400);
-            lastUIHeight = jmax (mainXmlElement->getIntAttribute ("uiHeight", lastUIHeight), 200);
+            lastUIWidth     = mainXmlElement->getIntAttribute ("uiWidth", lastUIWidth);
+            lastUIHeight    = mainXmlElement->getIntAttribute ("uiHeight", lastUIHeight);
+            oscPort         = mainXmlElement->getIntAttribute("oscPort", oscPort);
+            instanceNumber  = mainXmlElement->getIntAttribute("instanceNumber", instanceNumber);
         }
         
         forEachXmlChildElementWithTagName (*mainXmlElement, wrappedInstanceXmlElement, "WRAPPED_INSTANCE")
