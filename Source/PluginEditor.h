@@ -45,10 +45,10 @@ public:
     void resized() override;
     void timerCallback() override;
 
-    bool isInterestedInFileDrag (const StringArray&) override;
-    void fileDragEnter (const StringArray&, int, int) override;
-    void fileDragMove (const StringArray&, int, int) override;
-    void fileDragExit (const StringArray&) override;
+    bool isInterestedInFileDrag (const StringArray&) override   { return true; }
+    void fileDragEnter (const StringArray&, int, int) override  {}
+    void fileDragMove (const StringArray&, int, int) override   {}
+    void fileDragExit (const StringArray&) override             {}
     void filesDropped (const StringArray& files, int x, int y) override;
 
 private:
@@ -59,13 +59,16 @@ private:
     }
     
     void createPlugin (const PluginDescription& desc, Point<int> p);
+    
+    void updateBounds(int width, int height);
 
     AudioPluginFormatManager formatManager;
     KnownPluginList knownPluginList;
     
-    ScopedPointer<TextEditor> instanceNbEditor;
-    ScopedPointer<TextEditor> oscPortEditor;
-    ScopedPointer<Component> wrappedEditorComponent;
+    ScopedPointer<Label>        instanceNbLabel, oscPortLabel;
+    ScopedPointer<TextEditor>   instanceNbEditor;
+    ScopedPointer<TextEditor>   oscPortEditor;
+    ScopedPointer<Component>    wrappedEditorComponent;
     
     //==============================================================================
     void oscMessageReceived (const OSCMessage& message) override;

@@ -32,6 +32,13 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     //make sure we can open the default plugin file types
     formatManager.addDefaultFormats();
     
+    //instance number
+    addAndMakeVisible (instanceNbEditor = new TextEditor());
+    instanceNbEditor->setText(String(getProcessor().getInstanceNumber()));
+    instanceNbEditor->addListener(this);
+    addAndMakeVisible(instanceNbLabel = new Label());
+    instanceNbLabel->setText("instance nb:", dontSendNotification);
+    
     //OSC STUFF
     // specify here on which UDP port number to receive incoming OSC messages
     int oscPort = owner.getOscPort();
@@ -43,16 +50,13 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     addListener (this, "/load"); ///load patchnumero1
     
     //osc text editor
-    addAndMakeVisible (oscPortEditor = new TextEditor());
+    addAndMakeVisible(oscPortEditor = new TextEditor());
     oscPortEditor->setText(String(oscPort));
     oscPortEditor->addListener(this);
-    oscPortEditor->setBounds(owner.lastUIWidth/2, 0, owner.lastUIWidth/2, 20);
+    addAndMakeVisible(oscPortLabel = new Label());
+    oscPortLabel->setText("osc port:", dontSendNotification);
     
-    //instance number
-    addAndMakeVisible (instanceNbEditor = new TextEditor());
-    instanceNbEditor->setText(String(getProcessor().getInstanceNumber()));
-    instanceNbEditor->addListener(this);
-    instanceNbEditor->setBounds(0, 0, owner.lastUIWidth/2, 20);
+    updateBounds(getProcessor().lastUIWidth, getProcessor().lastUIHeight);
     
     //wrapped instance component
     addAndMakeVisible(wrappedEditorComponent = new Component());
@@ -90,6 +94,15 @@ void ReaktorHostProcessorEditor::textEditorReturnKeyPressed(TextEditor& textEdit
     unfocusAllComponents();
 }
 
+void ReaktorHostProcessorEditor::updateBounds(int width, int height)
+{
+    instanceNbLabel->   setBounds(0*width/4, 0, width/4, height);
+    instanceNbEditor->  setBounds(1*width/4, 0, width/4, height);
+    
+    oscPortLabel->      setBounds(2*width/4, 0, width/4, height);
+    oscPortEditor->     setBounds(3*width/4, 0, width/4, height);
+}
+
 //==============================================================================
 void ReaktorHostProcessorEditor::timerCallback()
 {
@@ -101,10 +114,7 @@ void ReaktorHostProcessorEditor::timerCallback()
             //set button position and size
             int width = wrappedInstanceEditorBounds.getWidth();
             int buttonHeight = 20;
-            instanceNbEditor->setBounds(0, 0, width/2, buttonHeight);
-            
-            oscPortEditor->setBounds(width/2, 0, width/2, buttonHeight);
-
+            updateBounds(width, buttonHeight);
             //show wrapped instance editor in its full size
             wrappedEditorComponent->addAndMakeVisible(instanceEditor);
             wrappedEditorComponent->setBounds(0, buttonHeight, wrappedInstanceEditorBounds.getWidth(), wrappedInstanceEditorBounds.getHeight());
@@ -112,6 +122,7 @@ void ReaktorHostProcessorEditor::timerCallback()
             //set whole size (potentially not necessary)
             setSize(width, buttonHeight + wrappedInstanceEditorBounds.getHeight());
             hasEditor = true;
+            stopTimer();
         }
 }
 
@@ -128,25 +139,7 @@ void ReaktorHostProcessorEditor::resized()
     getProcessor().lastUIWidth = width;
     getProcessor().lastUIHeight = getHeight();
     
-    instanceNbEditor->setBounds(0, 0, width/2, 20);
-    oscPortEditor->setBounds(width/2, 0, width/2, 20);
-}
-
-bool ReaktorHostProcessorEditor::isInterestedInFileDrag (const StringArray&)
-{
-    return true;
-}
-
-void ReaktorHostProcessorEditor::fileDragEnter (const StringArray&, int, int)
-{
-}
-
-void ReaktorHostProcessorEditor::fileDragMove (const StringArray&, int, int)
-{
-}
-
-void ReaktorHostProcessorEditor::fileDragExit (const StringArray&)
-{
+    updateBounds(width, 20);
 }
 
 void ReaktorHostProcessorEditor::filesDropped (const StringArray& files, int x, int y)
@@ -195,10 +188,6 @@ void ReaktorHostProcessorEditor::oscMessageReceived (const OSCMessage& message)
 
 void ReaktorHostProcessorEditor::showConnectionErrorMessage (const String& messageText)
 {
-    AlertWindow::showMessageBoxAsync (
-                                      AlertWindow::WarningIcon,
-                                      "Connection error",
-                                      messageText,
-                                      "OK");
+    AlertWindow::showMessageBoxAsync (AlertWindow::WarningIcon, "Connection error", messageText, "OK");
 }
 
