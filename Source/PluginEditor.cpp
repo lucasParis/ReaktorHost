@@ -41,18 +41,18 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
     }
     // tell the component to listen for OSC messages matching this address:
     addListener (this, "/load"); ///load patchnumero1
-
-
-    //open button
-    addAndMakeVisible (openButton = new TextButton("open .fxp"));
-    openButton->addListener(this);
-    openButton->setBounds(0, 0, owner.lastUIWidth/2, 20);
     
     //osc text editor
     addAndMakeVisible (oscPortEditor = new TextEditor());
     oscPortEditor->setText(String(oscPort));
     oscPortEditor->addListener(this);
     oscPortEditor->setBounds(owner.lastUIWidth/2, 0, owner.lastUIWidth/2, 20);
+    
+    //instance number
+    addAndMakeVisible (instanceNbEditor = new TextEditor());
+    instanceNbEditor->setText(String(getProcessor().getInstanceNumber()));
+    instanceNbEditor->addListener(this);
+    instanceNbEditor->setBounds(0, 0, owner.lastUIWidth/2, 20);
     
     //wrapped instance component
     addAndMakeVisible(wrappedEditorComponent = new Component());
@@ -71,12 +71,6 @@ ReaktorHostProcessorEditor::~ReaktorHostProcessorEditor()
 }
 
 //==============================================================================
-void ReaktorHostProcessorEditor::buttonClicked (Button* b)
-{
-    if (b == openButton)
-        getProcessor().loadFxpFile("Untitled1");
-}
-
 void ReaktorHostProcessorEditor::textEditorReturnKeyPressed(TextEditor& textEditor)
 {
     if (&textEditor == oscPortEditor)
@@ -88,7 +82,12 @@ void ReaktorHostProcessorEditor::textEditorReturnKeyPressed(TextEditor& textEdit
             showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
         }
     }
-
+    else if (&textEditor == instanceNbEditor)
+    {
+        int instanceNb = textEditor.getText().getIntValue();
+        getProcessor().setInstanceNumber(instanceNb);
+    }
+    unfocusAllComponents();
 }
 
 //==============================================================================
@@ -102,7 +101,7 @@ void ReaktorHostProcessorEditor::timerCallback()
             //set button position and size
             int width = wrappedInstanceEditorBounds.getWidth();
             int buttonHeight = 20;
-            openButton->setBounds(0, 0, width/2, buttonHeight);
+            instanceNbEditor->setBounds(0, 0, width/2, buttonHeight);
             
             oscPortEditor->setBounds(width/2, 0, width/2, buttonHeight);
 
@@ -129,7 +128,7 @@ void ReaktorHostProcessorEditor::resized()
     getProcessor().lastUIWidth = width;
     getProcessor().lastUIHeight = getHeight();
     
-    openButton->setBounds(0, 0, width/2, 20);
+    instanceNbEditor->setBounds(0, 0, width/2, 20);
     oscPortEditor->setBounds(width/2, 0, width/2, 20);
 }
 

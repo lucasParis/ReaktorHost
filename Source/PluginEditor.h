@@ -31,7 +31,6 @@ class ReaktorHostProcessorEditor
     : public AudioProcessorEditor
     , private Timer
     , public FileDragAndDropTarget
-    , private Button::Listener
     , private TextEditor::Listener
     , private OSCReceiver
     , private OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>
@@ -40,7 +39,6 @@ public:
     ReaktorHostProcessorEditor (ReaktorHostProcessor&);
     ~ReaktorHostProcessorEditor();
 
-    void buttonClicked (Button* b) override;
     void textEditorReturnKeyPressed (TextEditor&) override;
     
     void paint (Graphics&) override;
@@ -65,7 +63,7 @@ private:
     AudioPluginFormatManager formatManager;
     KnownPluginList knownPluginList;
     
-    ScopedPointer<TextButton> openButton;
+    ScopedPointer<TextEditor> instanceNbEditor;
     ScopedPointer<TextEditor> oscPortEditor;
     ScopedPointer<Component> wrappedEditorComponent;
     
