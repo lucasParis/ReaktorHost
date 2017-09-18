@@ -47,7 +47,10 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
         showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
     }
     // tell the component to listen for OSC messages matching this address:
-    addListener (this, "/load"); ///load patchnumero1
+    addListener (this, "/module/0/load"); ///load patchnumero1
+    
+    
+    
     
     //osc text editor
     addAndMakeVisible(oscPortEditor = new TextEditor());
@@ -180,7 +183,8 @@ void ReaktorHostProcessorEditor::createPlugin (const PluginDescription& desc, Po
 
 void ReaktorHostProcessorEditor::oscMessageReceived (const OSCMessage& message)
 {
-    if (message.getAddressPattern().matches("/load"))
+    std::cout << "got osc" << std::endl;
+    if (message.getAddressPattern().matches("/module/0/load"))
         if (message.size() == 1 && message[0].isString())
             getProcessor().loadFxpFile(message[0].getString());
             

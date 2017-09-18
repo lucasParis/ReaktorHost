@@ -99,6 +99,16 @@ void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, con
 //==============================================================================
 void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
+    //OSCOUT
+    oscOut.connect ("127.0.0.1", 9000);
+//        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
+    oscOut.send ("/ctrl", (float) 1, (float)1, (int) 1);
+
+//    //OSCOUT
+//    if (! oscOut.connect ("127.0.0.1", 9000))
+//        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
+
+    
     if (wrappedInstance != nullptr)
     {
         wrappedInstance->prepareToPlay(newSampleRate, samplesPerBlock);
@@ -126,6 +136,26 @@ void ReaktorHostProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& 
         wrappedInstance->setPlayHead(getPlayHead());
         wrappedInstance->processBlock(buffer, midiMessages);
     }
+    
+     MidiBuffer::Iterator iterator (midiMessages);
+    MidiMessage message;
+
+    int sampleNumber;
+
+    while (iterator.getNextEvent (message, sampleNumber))
+    {
+        if (message.isController())
+        {
+//            std::cout << "midi" << std::endl;
+//            std::cout << message.getControllerNumber() << std::endl;
+//            std::cout << message.getControllerValue() << std::endl;
+            
+            oscOut.send ("/ctrl", (int) message.getControllerNumber(), (int) message.getControllerValue(), (int) instanceNumber);
+            
+        }
+    }
+    //    midiMessages.clear();
+    
 }
 
 //==============================================================================

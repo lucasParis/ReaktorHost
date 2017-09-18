@@ -23,7 +23,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-static String FXP_FOLDER_PATH = "/Users/nicolai/Desktop/FXP/";
+static String FXP_FOLDER_PATH = "/Users/lucas/Work/17_01_antiVolume/08_jucePatches/";
 
 class ReaktorHostProcessor  : public AudioProcessor
 {
@@ -98,6 +98,8 @@ private:
     
     bool isWrappedInstanceReadyToPlay;
     int oscPort, instanceNumber;
+
+    OSCSender oscOut;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };
