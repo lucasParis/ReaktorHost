@@ -102,7 +102,7 @@ void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBl
     //OSCOUT
     oscOut.connect ("127.0.0.1", 9000);
 //        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
-    oscOut.send ("/ctrl", (float) 1, (float)1, (int) 1);
+//    oscOut.send ("/ctrl", (float) 1, (float)1, (int) 1);
 
 //    //OSCOUT
 //    if (! oscOut.connect ("127.0.0.1", 9000))

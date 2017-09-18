@@ -47,7 +47,7 @@ ReaktorHostProcessorEditor::ReaktorHostProcessorEditor (ReaktorHostProcessor& ow
         showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
     }
     // tell the component to listen for OSC messages matching this address:
-    addListener (this, "/module/0/load"); ///load patchnumero1
+    addListener (this); ///load patchnumero1
     
     
     
@@ -132,8 +132,11 @@ void ReaktorHostProcessorEditor::timerCallback()
 
 void ReaktorHostProcessorEditor::paint (Graphics& g)
 {
+
+
     g.setColour (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.fillAll();
+
 }
 
 void ReaktorHostProcessorEditor::resized()
@@ -189,6 +192,53 @@ void ReaktorHostProcessorEditor::oscMessageReceived (const OSCMessage& message)
             getProcessor().loadFxpFile(message[0].getString());
             
 }
+
+void ReaktorHostProcessorEditor::oscBundleReceived (const OSCBundle & bundle)
+{
+//    std::cout << "got osc" << std::endl;
+    for(int i = 0; i < bundle.size(); i++)
+    {
+        if(bundle.operator[](i).isMessage())
+        {
+            const OSCMessage& message = bundle.operator[](i).getMessage();
+            if (message.getAddressPattern().matches("/module/0/load"))
+            {
+                if (message.size() == 1 && message[0].isString())
+                {
+                    getProcessor().loadFxpFile(message[0].getString());
+                    getProcessor().oscOut.send ("/enable", (String) message[0].getString(), (int) getProcessor().getInstanceNumber());
+
+                }
+                
+                
+            }
+            else if (message.getAddressPattern().toString().substring(0, 10).compare("/module/0/") == 0)
+            {
+//                std::cout << "modules 11111" << std::endl;
+                String parameterName = message.getAddressPattern().toString().substring(9);
+//                std::cout << "modules 11111 " << parameterName <<  std::endl;
+                if(message[0].isFloat32())
+                {
+                    getProcessor().setVstCtrl(parameterName, message[0].getFloat32());
+                }
+                else if(message[0].isInt32())
+                {
+                    getProcessor().setVstCtrl(parameterName, (float)message[0].getInt32());
+                }
+                    
+            }
+            else if (message.getAddressPattern().toString().substring(0, 14).compare("/mixer/module/") == 0)
+            {
+//                std::cout << "modulessss 2222" << std::endl;
+            }
+        }
+
+    }
+
+    
+    
+}
+
 
 void ReaktorHostProcessorEditor::showConnectionErrorMessage (const String& messageText)
 {

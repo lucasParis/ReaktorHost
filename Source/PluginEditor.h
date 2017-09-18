@@ -33,7 +33,7 @@ class ReaktorHostProcessorEditor
     , public FileDragAndDropTarget
     , private TextEditor::Listener
     , private OSCReceiver
-    , private OSCReceiver::ListenerWithOSCAddress<OSCReceiver::MessageLoopCallback>
+    , private OSCReceiver::Listener<OSCReceiver::MessageLoopCallback>
 {
 public:
     ReaktorHostProcessorEditor (ReaktorHostProcessor&);
@@ -72,6 +72,8 @@ private:
     
     //==============================================================================
     void oscMessageReceived (const OSCMessage& message) override;
+    void oscBundleReceived (const OSCBundle & bundle) override;
+
     void showConnectionErrorMessage (const String& messageText);
     
     bool hasEditor;

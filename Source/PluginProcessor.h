@@ -23,7 +23,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-static String FXP_FOLDER_PATH = "/Users/lucas/Work/17_01_antiVolume/08_jucePatches/";
+static String FXP_FOLDER_PATH = "/Users/lucas/Work/MOI/17_01_antiVolume/08_jucePatches/";
 
 class ReaktorHostProcessor  : public AudioProcessor
 {
@@ -39,6 +39,25 @@ public:
     void reset() override;
     
     void loadFxpFile(String fileName);
+    
+    void setVstCtrl(String name, float value)
+    {
+        //optimize: when loading fxp look for /fader/[0-9] and write into table for direct access
+    #if JUCE_PLUGINHOST_VST
+        for(int i = 0; i < wrappedInstance->getNumParameters(); i ++)
+        {
+//            std::cout << wrappedInstance->getParameterName(i) << std::endl;
+            if(wrappedInstance->getParameterName(i).compare(name) == 0)
+            {
+                wrappedInstance->setParameter (i, value);
+                break;
+            }
+
+        }
+    #endif
+
+    }
+    
 
     //==============================================================================
     void processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages) override
@@ -86,6 +105,8 @@ public:
     
     void addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos);
 
+    OSCSender oscOut;
+
 private:
     //==============================================================================
     template <typename FloatType>
@@ -99,7 +120,6 @@ private:
     bool isWrappedInstanceReadyToPlay;
     int oscPort, instanceNumber;
 
-    OSCSender oscOut;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReaktorHostProcessor)
 };
