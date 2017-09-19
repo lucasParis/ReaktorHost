@@ -99,14 +99,10 @@ void ReaktorHostProcessor::addFilterCallback (AudioPluginInstance* instance, con
 //==============================================================================
 void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBlock)
 {
-    //OSCOUT
-    oscOut.connect ("127.0.0.1", 9000);
-//        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
-//    oscOut.send ("/ctrl", (float) 1, (float)1, (int) 1);
-
-//    //OSCOUT
-//    if (! oscOut.connect ("127.0.0.1", 9000))
-//        showConnectionErrorMessage ("Error: could not connect to UDP port 9001.");
+    
+    //OSC STUFF
+    // specify here on which UDP port number to receive incoming OSC messages
+    
 
     
     if (wrappedInstance != nullptr)
@@ -114,6 +110,22 @@ void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBl
         wrappedInstance->prepareToPlay(newSampleRate, samplesPerBlock);
         isWrappedInstanceReadyToPlay = true;
     }
+    
+    
+    oscOut.connect ("127.0.0.1", 9000);
+
+    int oscPort = getOscPort();
+    if (! connect (oscPort))
+    {
+        //        (ReaktorHostProcessorEditor*)(getWrappedInstanceEditor())->showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
+    }
+    
+    
+    // tell the component to listen for OSC messages matching this address:
+    //    addListener (this); ///load patchnumero1
+    OSCReceiver::addListener(this);
+    
+    //OSCOUT
 }
 
 void ReaktorHostProcessor::releaseResources()
@@ -293,6 +305,14 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
             lastUIHeight    = mainXmlElement->getIntAttribute ("uiHeight", lastUIHeight);
             oscPort         = mainXmlElement->getIntAttribute("oscPort", oscPort);
             instanceNumber  = mainXmlElement->getIntAttribute("instanceNumber", instanceNumber);
+            
+            oscOut.connect ("127.0.0.1", 9000);
+            
+            int oscPort = getOscPort();
+            if (! connect (oscPort))
+            {
+                //        (ReaktorHostProcessorEditor*)(getWrappedInstanceEditor())->showConnectionErrorMessage ("Error: could not connect to UDP port " + String(oscPort));
+            }
         }
         
         forEachXmlChildElementWithTagName (*mainXmlElement, wrappedInstanceXmlElement, "WRAPPED_INSTANCE")
@@ -342,3 +362,61 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ReaktorHostProcessor();
 }
+
+
+void ReaktorHostProcessor::oscMessageReceived (const OSCMessage& message)
+{
+    std::cout << "got osc" << std::endl;
+    if (message.getAddressPattern().matches("/module/0/load"))
+        if (message.size() == 1 && message[0].isString())
+            loadFxpFile(message[0].getString());
+
+}
+
+void ReaktorHostProcessor::oscBundleReceived (const OSCBundle & bundle)
+{
+//    std::cout << "got osc" << std::endl;
+    for(int i = 0; i < bundle.size(); i++)
+    {
+        if(bundle.operator[](i).isMessage())
+        {
+            const OSCMessage& message = bundle.operator[](i).getMessage();
+            if (message.getAddressPattern().matches("/module/0/load"))
+            {
+                if (message.size() == 1 && message[0].isString())
+                {
+                    loadFxpFile(message[0].getString());
+                    oscOut.send ("/enable", (String) message[0].getString(), (int) getInstanceNumber());
+
+                }
+
+
+            }
+            else if (message.getAddressPattern().toString().substring(0, 10).compare("/module/0/") == 0)
+            {
+//                std::cout << "modules 11111" << std::endl;
+                String parameterName = message.getAddressPattern().toString().substring(9);
+//                std::cout << "modules 11111 " << parameterName <<  std::endl;
+                if(message[0].isFloat32())
+                {
+                    setVstCtrl(parameterName, message[0].getFloat32());
+                }
+                else if(message[0].isInt32())
+                {
+                    setVstCtrl(parameterName, (float)message[0].getInt32());
+                }
+
+            }
+            else if (message.getAddressPattern().toString().substring(0, 14).compare("/mixer/module/") == 0)
+            {
+//                std::cout << "modulessss 2222" << std::endl;
+            }
+        }
+
+    }
+
+
+
+}
+
+

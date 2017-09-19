@@ -26,11 +26,17 @@
 static String FXP_FOLDER_PATH = "/Users/lucas/Work/MOI/17_01_antiVolume/08_jucePatches/";
 
 class ReaktorHostProcessor  : public AudioProcessor
+                            , public OSCReceiver
+                            , public OSCReceiver::Listener<OSCReceiver::MessageLoopCallback>
 {
 public:
     //==============================================================================
     ReaktorHostProcessor();
     ~ReaktorHostProcessor();
+    
+    void oscMessageReceived (const OSCMessage& message) override;
+    void oscBundleReceived (const OSCBundle & bundle) override;
+
 
     //==============================================================================
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;

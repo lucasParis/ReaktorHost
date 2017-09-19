@@ -32,8 +32,8 @@ class ReaktorHostProcessorEditor
     , private Timer
     , public FileDragAndDropTarget
     , private TextEditor::Listener
-    , private OSCReceiver
-    , private OSCReceiver::Listener<OSCReceiver::MessageLoopCallback>
+//    , private OSCReceiver
+//    , private OSCReceiver::Listener<OSCReceiver::MessageLoopCallback>
 {
 public:
     ReaktorHostProcessorEditor (ReaktorHostProcessor&);
@@ -71,8 +71,8 @@ private:
     ScopedPointer<Component>    wrappedEditorComponent;
     
     //==============================================================================
-    void oscMessageReceived (const OSCMessage& message) override;
-    void oscBundleReceived (const OSCBundle & bundle) override;
+//    void oscMessageReceived (const OSCMessage& message) override;
+//    void oscBundleReceived (const OSCBundle & bundle) override;
 
     void showConnectionErrorMessage (const String& messageText);
     
