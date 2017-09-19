@@ -111,7 +111,9 @@ public:
     
     void addFilterCallback (AudioPluginInstance* instance, const String& error, Point<int> pos);
 
-    OSCSender oscOut;
+    OSCSender oscOutP5;
+    OSCSender oscOutMixer;
+
 
 private:
     //==============================================================================

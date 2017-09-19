@@ -112,7 +112,8 @@ void ReaktorHostProcessor::prepareToPlay (double newSampleRate, int samplesPerBl
     }
     
     
-    oscOut.connect ("127.0.0.1", 9000);
+    oscOutP5.connect ("127.0.0.1", 9000);
+    oscOutMixer.connect ("127.0.0.1", 10000);
 
     int oscPort = getOscPort();
     if (! connect (oscPort))
@@ -162,7 +163,7 @@ void ReaktorHostProcessor::process (AudioBuffer<FloatType>& buffer, MidiBuffer& 
 //            std::cout << message.getControllerNumber() << std::endl;
 //            std::cout << message.getControllerValue() << std::endl;
             
-            oscOut.send ("/ctrl", (int) message.getControllerNumber(), (int) message.getControllerValue(), (int) instanceNumber);
+            oscOutP5.send ("/ctrl", (int) message.getControllerNumber(), (int) message.getControllerValue(), (int) instanceNumber);
             
         }
     }
@@ -306,8 +307,8 @@ void ReaktorHostProcessor::setStateInformation (const void* data, int sizeInByte
             oscPort         = mainXmlElement->getIntAttribute("oscPort", oscPort);
             instanceNumber  = mainXmlElement->getIntAttribute("instanceNumber", instanceNumber);
             
-            oscOut.connect ("127.0.0.1", 9000);
-            
+            oscOutP5.connect ("127.0.0.1", 9000);
+            oscOutMixer.connect ("127.0.0.1", 10000);
             int oscPort = getOscPort();
             if (! connect (oscPort))
             {
@@ -386,11 +387,23 @@ void ReaktorHostProcessor::oscBundleReceived (const OSCBundle & bundle)
                 if (message.size() == 1 && message[0].isString())
                 {
                     loadFxpFile(message[0].getString());
-                    oscOut.send ("/enable", (String) message[0].getString(), (int) getInstanceNumber());
+                    oscOutP5.send ("/enable", (String) message[0].getString(), (int) getInstanceNumber());
 
                 }
 
 
+            }
+            else if (message.getAddressPattern().matches("/startTimer"))
+            {
+//                if (message.size() == 1 && message[0].isString())
+//                {
+//                    loadFxpFile(message[0].getString());
+//                    oscOutP5.send ("/enable", (String) message[0].getString(), (int) getInstanceNumber());
+//                    
+//                }
+                // send to other instance number 10.10.10.[2-4] port 8000
+                
+                
             }
             else if (message.getAddressPattern().toString().substring(0, 10).compare("/module/0/") == 0)
             {
@@ -407,12 +420,24 @@ void ReaktorHostProcessor::oscBundleReceived (const OSCBundle & bundle)
                 }
 
             }
-            else if (message.getAddressPattern().toString().substring(0, 14).compare("/mixer/module/") == 0)
+            else //if (message.getAddressPattern().toString().substring(0, 14).compare("/mixer/module/") == 0)
             {
-//                std::cout << "modulessss 2222" << std::endl;
+                oscOutMixer.send(message);
+                oscOutP5.send(message);
+//                String addr = message.getAddressPattern().toString();
+//
+//                if(message[0].isFloat32())
+//                {
+//                    oscOutP5.send (addr, (float)message[0].getFloat32());
+//
+//                }
+//                else if(message[0].isInt32())
+//                {
+//                    oscOutP5.send (addr, (int)message[0].getInt32());
+//
+//                }
             }
         }
-
     }
 
 
