@@ -136,6 +136,9 @@ void ReaktorHostProcessorEditor::paint (Graphics& g)
 
     g.setColour (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
     g.fillAll();
+    
+    g.fillAll(Colours::red);
+
 
 }
 

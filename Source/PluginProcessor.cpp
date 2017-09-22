@@ -287,11 +287,49 @@ void ReaktorHostProcessor::loadFxpFile(String fileName)
     {
         MemoryBlock mb;
         f.loadFileAsData (mb);
-#if JUCE_PLUGINHOST_VST
-        VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
-//#elif JUCE_PLUGINHOST_AU
-        //AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
-#endif
+        #if JUCE_PLUGINHOST_VST
+                VSTPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+        
+        //Adresses optiomisation
+        
+        addressesMap.clear();
+        std::vector<String>  adressesIncoming;
+        for(int i = 0; i < 8; i++)
+        {
+            adressesIncoming.push_back("/fader/" +  std::to_string(i));
+            adressesIncoming.push_back("/bigButton/" +  std::to_string(i));
+            if(i < 4)
+            {
+                adressesIncoming.push_back("/smallButton/" +  std::to_string(i));
+            }
+        }
+        
+        for(int i = 0; i < wrappedInstance->getNumParameters(); i ++)
+        {
+            for(int j = 0; j < adressesIncoming.size(); j++)
+            {
+                String adr = adressesIncoming[j];
+                if(wrappedInstance->getParameterName(i).compare(adr) == 0)
+                {
+                    addressesMap[adr] = i;
+                    break;
+                }
+                
+            }
+            //            std::cout << wrappedInstance->getParameterName(i) << std::endl;
+//            if(wrappedInstance->getParameterName(i).compare(name) == 0)
+//            {
+//                wrappedInstance->setParameter (i, value);
+//                break;
+//            }
+//            
+        }
+        
+        
+                //                addressIndexes
+        //#elif JUCE_PLUGINHOST_AU
+                //AUPluginFormat::loadFromFXBFile (wrappedInstance, mb.getData(), mb.getSize());
+        #endif
     }
 }
 

@@ -22,6 +22,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <map>
+#include  <vector>
 
 static String FXP_FOLDER_PATH = "/Users/lucas/Work/MOI/17_01_antiVolume/08_jucePatches/";
 
@@ -46,20 +48,32 @@ public:
     
     void loadFxpFile(String fileName);
     
+    
+    std::map<String,int> addressesMap;
+    
     void setVstCtrl(String name, float value)
     {
         //optimize: when loading fxp look for /fader/[0-9] and write into table for direct access
     #if JUCE_PLUGINHOST_VST
-        for(int i = 0; i < wrappedInstance->getNumParameters(); i ++)
+//        for(int i = 0; i < wrappedInstance->getNumParameters(); i ++)
+//        {
+////            std::cout << wrappedInstance->getParameterName(i) << std::endl;
+//            if(wrappedInstance->getParameterName(i).compare(name) == 0)
+//            {
+//                wrappedInstance->setParameter (i, value);
+//                break;
+//            }
+//
+//        }
+        auto it = addressesMap.find(name);
+        if (it != addressesMap.end())
         {
-//            std::cout << wrappedInstance->getParameterName(i) << std::endl;
-            if(wrappedInstance->getParameterName(i).compare(name) == 0)
-            {
-                wrappedInstance->setParameter (i, value);
-                break;
-            }
+            int index = it->second;
+            wrappedInstance->setParameter (index, value);
 
         }
+        
+        
     #endif
 
     }
